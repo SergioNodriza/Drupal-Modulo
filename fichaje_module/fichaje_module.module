@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+
+function fichaje_module_theme($existing, $type, $theme, $path) {
+  return array(
+    'fichajes_list' => array(
+      'variables' => array('results' => array())
+    ),
+    'empresas_list' => array(
+      'variables' => array('results' => array())
+    ),
+    'fichajes_usuario' => array(
+      'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => '')
+    ),
+  );
+}
+
+function fichaje_module_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'fichaje_module/fichaje_module_css';
+}

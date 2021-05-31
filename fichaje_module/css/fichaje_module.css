@@ -1,0 +1,57 @@
+.equalDivide tr td {
+  width:25%;
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.colorNodriza {
+  font-weight: bold;
+  color: #905fe7;
+}
+
+.colorOniad {
+  font-weight: bold;
+  color: #1a4279;
+}
+
+.colorDoctorProperty {
+  font-weight: bold;
+  color: #31cee2;
+}
+
+.column10 {
+  display: inline-block;
+  width: 10%;
+  padding: 10px;
+}
+
+.column20 {
+  display: inline-block;
+  width: 20%;
+  padding: 10px;
+}
+
+/* HIDE RADIO */
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  outline: 2px solid #282525;
+}

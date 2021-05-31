@@ -1,0 +1,7 @@
+fichaje_module_css:
+  css:
+    theme:
+      css/fichaje_module.css: {}
+
+  js:
+    js/fichaje_module.js: {}

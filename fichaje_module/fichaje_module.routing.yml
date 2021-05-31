@@ -1,0 +1,23 @@
+fichaje.content:
+  path: '/fichar/{empresaName}'
+  defaults:
+    _controller: '\Drupal\fichaje_module\Controller\FichajeController::fichador'
+    _title: 'Fichajes'
+    empresaName:
+  requirements:
+    _permission: 'access content'
+
+fichaje.listado:
+  path: '/fichador'
+  defaults:
+    _controller: '\Drupal\fichaje_module\Controller\EmpresasController::empresas'
+  requirements:
+    _permission: 'access content'
+
+fichaje.parte:
+  path: '/parte/{empresaName}'
+  defaults:
+    _controller: '\Drupal\fichaje_module\Controller\ParteController::parte'
+    empresaName:
+  requirements:
+    _permission: 'access content'

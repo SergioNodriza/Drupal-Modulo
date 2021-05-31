@@ -1,0 +1,9 @@
+name: Fichaje Module
+description: Crea una Hoja de Fichaje.
+package: Custom
+type: module
+version: 1.0
+core: 8.x
+
+libraries:
+ - fichaje_module/fichaje_module_css

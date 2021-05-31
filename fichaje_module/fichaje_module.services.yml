@@ -1,0 +1,9 @@
+services:
+  fichaje_module.time_service:
+    class: Drupal\fichaje_module\Service\TimeService
+
+  fichaje_module.query_service:
+    class: Drupal\fichaje_module\Service\QueryService
+
+  fichaje_module.button_maker_service:
+    class: Drupal\fichaje_module\Service\ButtonMakerService

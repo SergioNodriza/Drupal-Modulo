@@ -1,0 +1,25 @@
+
+{% extends '@fichaje_module/base.html.twig' %}
+
+{% block body %}
+
+  <hr>
+
+  <ul>
+    {%  for fichaje in results %}
+      <li>
+        <b>{{ fichaje.type }}:</b> {{ fichaje.empresa }} - {{ fichaje.date }}
+        {% if fichaje.time %}
+          <ul><li><b> Tiempo:</b> {{ fichaje.time }}</li></ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p>
+    <form action='/fichador'>
+      <input type='submit' value='Volver' />
+    </form>
+  </p>
+
+{% endblock %}

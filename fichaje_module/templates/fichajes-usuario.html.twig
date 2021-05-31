@@ -1,0 +1,98 @@
+
+{% extends '@fichaje_module/base.html.twig' %}
+
+{% block body %}
+
+  <hr>
+
+  <div class="right">
+    <button onclick="showHide()">Filtros</button>
+  </div>
+
+  <div class="center" id="hideShow">
+
+    <form method="post">
+
+      {% for button in buttons %}
+
+        {% if route == button.name %}
+
+{#           <input type="hidden" name="link" value="{{ route }}" />#}
+
+          <div class="column10">
+            <label>
+              <input type="radio" name="link" value="{{ button.name }}" checked="checked">
+              <img src="{{ button.image }}" alt="{{ button.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+            </label>
+          </div>
+
+        {% else %}
+
+          <div class="column10">
+            <label>
+              <input type="radio" name="link" value="{{ button.name }}">
+              <img src="{{ button.image }}" alt="{{ button.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+            </label>
+          </div>
+
+        {% endif %}
+
+      {% endfor %}
+
+      </a>
+
+      <label for="date"></label>
+      <input type="date" id="date" name="date_filter">
+
+      <input type="submit" value="Filtrar">
+    </form>
+
+    <br><hr>
+
+  </div>
+
+
+  <br><br>
+
+
+  {% for week in results %}
+
+    {% if results|length == 1%}
+      <p><b>Horas del dia: </b> {{ week.total }} </p>
+    {% else %}
+      <p><b>Horas en la semana: </b> {{ week.total }} </p>
+    {% endif %}
+
+    <table class="equalDivide">
+      <tr>
+        <th class="center">Fecha</th>
+        <th class="center">Tipo</th>
+        <th class="center">Empresa</th>
+        <th class="center">Tiempo</th>
+      </tr>
+
+      {% for fichaje in week.fichajes %}
+
+        <tr>
+          <td>{{ fichaje.date }}</td>
+          <td>{{ fichaje.type }}</td>
+
+          {% if fichaje.empresa == 'NodrizaTech' %}
+            <td class="colorNodriza">{{ fichaje.empresa }}</td>
+          {% elseif fichaje.empresa == 'Oniad' %}
+            <td class="colorOniad">{{ fichaje.empresa }}</td>
+          {% elseif fichaje.empresa == 'DoctorProperty' %}
+            <td class="colorDoctorProperty">{{ fichaje.empresa }}</td>
+          {% endif %}
+
+          <td>{{ fichaje.time }}</td>
+        </tr>
+
+      {% endfor %}
+    </table>
+
+    <br>
+
+  {% endfor %}
+
+{% endblock %}

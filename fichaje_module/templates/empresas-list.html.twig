@@ -1,0 +1,18 @@
+
+{% extends '@fichaje_module/base.html.twig' %}
+
+{% block body %}
+
+  <h1 class="js-quickedit-page-title title page-title">Fichador</h1>
+  <hr>
+
+  <div class="center">
+    {%  for empresa in results %}
+      <div class="column20">
+        <a href="{{ empresa.link }}">
+          <button><img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100"></button>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
