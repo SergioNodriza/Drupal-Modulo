@@ -8,7 +8,11 @@
 }
 
 .right {
-  text-align: right;
+  float: right;
+}
+
+.left {
+  float: left;
 }
 
 .colorNodriza {

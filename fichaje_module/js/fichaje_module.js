@@ -7,3 +7,14 @@ function showHide() {
     x.style.display = "none";
   }
 }
+
+function showHideTables(key) {
+
+  const x = document.getElementById(key);
+
+    if (x.style.visibility === "collapse") {
+      x.style.visibility = "visible";
+    } else {
+      x.style.visibility = "collapse";
+    }
+}

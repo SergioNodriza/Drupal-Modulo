@@ -5,6 +5,7 @@
  */
 namespace Drupal\fichaje_module\Controller;
 
+use Drupal;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
@@ -17,23 +18,23 @@ class ParteController extends ControllerBase {
 
   public function __construct()
   {
-    $this->timeService = \Drupal::service('fichaje_module.time_service');
-    $this->queryService = \Drupal::service('fichaje_module.query_service');
-    $this->buttonMakerService = \Drupal::service('fichaje_module.button_maker_service');
+    $this->timeService = Drupal::service('fichaje_module.time_service');
+    $this->queryService = Drupal::service('fichaje_module.query_service');
+    $this->buttonMakerService = Drupal::service('fichaje_module.button_maker_service');
   }
 
 
   public function parte($empresaName)
   {
-    \Drupal::service("router.builder")->rebuild();
-    $user = \Drupal::currentUser();
+    Drupal::service("router.builder")->rebuild();
+    $user = Drupal::currentUser();
     $connection = Database::getConnection();
 
     $dateFilter = $_POST['date_filter'];
     $linkFilter = $_POST['link'];
     $this->tryRedirect($linkFilter, $dateFilter);
 
-    $date = \Drupal::request()->get('date_filter');
+    $date = Drupal::request()->get('date_filter');
     if (!$empresaName) {$empresaName = '%';}
     $fichajes = $this->queryService->queryFichajesUsuario($connection, $user, $empresaName, $date . '%');
 
@@ -76,7 +77,7 @@ class ParteController extends ControllerBase {
       '#theme' => 'fichajes_usuario',
       '#results' => $arrayWeeks,
       '#buttons' => $this->buttons($connection),
-      '#route' => \Drupal::routeMatch()->getParameter('empresaName')
+      '#route' => Drupal::routeMatch()->getParameter('empresaName')
     );
   }
 
@@ -109,7 +110,7 @@ class ParteController extends ControllerBase {
 
     $empresasIds = $this->queryService->queryEmpresasIds($connection);
 
-    if (\Drupal::request()->getRequestUri() !== '/parte') {
+    if (Drupal::request()->getRequestUri() !== '/parte') {
       return $this->buttonMakerService->makeButtonsParte($empresasIds, true);
     }
 

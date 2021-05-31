@@ -3,7 +3,7 @@
 
 {% block body %}
 
-  <hr>
+  <hr><br>
 
   <div class="right">
     <button onclick="showHide()">Filtros</button>
@@ -16,8 +16,6 @@
       {% for button in buttons %}
 
         {% if route == button.name %}
-
-{#           <input type="hidden" name="link" value="{{ route }}" />#}
 
           <div class="column10">
             <label>
@@ -39,31 +37,31 @@
 
       {% endfor %}
 
-      </a>
-
       <label for="date"></label>
       <input type="date" id="date" name="date_filter">
 
       <input type="submit" value="Filtrar">
     </form>
 
-    <br><hr>
-
   </div>
 
+  <br><br><hr><br>
 
-  <br><br>
+  {% for key, week in results %}
 
+    <div>
 
-  {% for week in results %}
+      <div class="left">
+        <p><b>Horas en la semana: </b> {{ week.total }} </p>
+      </div>
 
-    {% if results|length == 1%}
-      <p><b>Horas del dia: </b> {{ week.total }} </p>
-    {% else %}
-      <p><b>Horas en la semana: </b> {{ week.total }} </p>
-    {% endif %}
+      <div class="right">
+        <button onclick="showHideTables('{{ key }}')">Tabla</button>
+      </div>
 
-    <table class="equalDivide">
+    </div>
+
+    <table class="equalDivide" id="{{ key }}">
       <tr>
         <th class="center">Fecha</th>
         <th class="center">Tipo</th>
@@ -91,7 +89,7 @@
       {% endfor %}
     </table>
 
-    <br>
+    <hr><br>
 
   {% endfor %}
 
