@@ -7,3 +7,6 @@ services:
 
   fichaje_module.button_maker_service:
     class: Drupal\fichaje_module\Service\ButtonMakerService
+
+  fichaje_module.create_node_service:
+    class: Drupal\fichaje_module\Service\CreateNodeService

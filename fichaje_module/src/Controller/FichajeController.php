@@ -8,7 +8,6 @@ namespace Drupal\fichaje_module\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityStorageException;
-use Drupal\node\Entity\Node;
 
 class FichajeController extends ControllerBase {
 
@@ -16,10 +15,14 @@ class FichajeController extends ControllerBase {
   const typeClose = 'Salida';
 
   private $queryService;
+  private $createNodeService;
+  private $timeService;
 
   public function __construct()
   {
     $this->queryService = \Drupal::service('fichaje_module.query_service');
+    $this->createNodeService = \Drupal::service('fichaje_module.create_node_service');
+    $this->timeService = \Drupal::service('fichaje_module.time_service');
   }
 
   /**
@@ -31,6 +34,44 @@ class FichajeController extends ControllerBase {
     $user = \Drupal::currentUser();
     $connection = Database::getConnection();
 
+
+    if (\Drupal::request()->get('date_filter')) {
+
+      $date = \Drupal::request()->get('date_filter');
+      $time = \Drupal::request()->get('time_filter');
+      $dateTime = $date . ' ' . $time;
+
+      $empresaId = $this->queryService->queryIdEmpresa($connection, $empresaName);
+      $interval = $this->queryService->queryTimeDiff($connection, $user, $dateTime);
+
+      $this->createNodeService->createNode($user, self::typeClose, $empresaId, $interval);
+      $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
+
+      $results[] = $this->resultConfig($empresaName, $interval);
+      $results[] = $this->resultConfig($empresaName);
+
+      return array(
+        '#title' => 'Fichajes',
+        '#theme' => 'fichajes_list',
+        '#results' => $results
+      );
+    }
+
+
+    if (\Drupal::request()->get('warning')) {
+
+      $fichaje = $this->queryService->queryLastFichaje($connection, $user);
+      $fichaje['date'] = $this->timeService->formatDate($fichaje['date']);
+
+      return array(
+        '#title' => 'Fichar',
+        '#theme' => 'fichar',
+        '#fichaje' => $fichaje
+      );
+
+    }
+
+
     $empresaId = $this->queryService->queryIdEmpresa($connection, $empresaName);
     $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
 
@@ -41,49 +82,29 @@ class FichajeController extends ControllerBase {
       if ($last_fichaje['name'] !== $empresaName) {
 
         $old_empresaID = $this->queryService->queryIdEmpresa($connection, $last_fichaje['name']);
-        $this->createNode($user, self::typeClose, $old_empresaID, $interval);
-        $this->createNode($user, self::typeOpen, $empresaId);
+        $this->createNodeService->createNode($user, self::typeClose, $old_empresaID, $interval);
+        $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
 
         $results[] = $this->resultConfig($last_fichaje['name'], $interval);
         $results[] = $this->resultConfig($empresaName);
 
       } else {
 
-        $this->createNode($user, self::typeClose, $empresaId, $interval);
+        $this->createNodeService->createNode($user, self::typeClose, $empresaId, $interval);
         $results[] = $this->resultConfig($empresaName, $interval);
       }
 
     } else {
 
-      $this->createNode($user, self::typeOpen, $empresaId);
+      $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
       $results[] = $this->resultConfig($empresaName);
     }
 
     return array(
+      '#title' => 'Fichajes',
       '#theme' => 'fichajes_list',
       '#results' => $results
     );
-  }
-
-  /**
-   * @throws EntityStorageException
-   */
-  public function createNode($user, $type, $empresaId, $interval = false) {
-
-    $node = Node::create(['type' => 'hoja_fichaje']);
-    $node->set('title', $user->getAccountName() . ' | ' . date('d-m-Y H:i:s'));
-    $node->set('field_user_mark', $user->id());
-
-    if ($interval) {
-      $node->set('field_date_mark', date('Y-m-d\TH:i:s'));
-      $node->set('field_time_diff_mark', $interval);
-    } else {
-      $node->set('field_date_mark', date('Y-m-d\TH:i:s', strtotime("+1 sec")));
-    }
-
-    $node->set('field_type_mark', $type);
-    $node->set('field_empresa_mark', $empresaId);
-    $node->save();
   }
 
   public function resultConfig($empresaName, $interval = false)

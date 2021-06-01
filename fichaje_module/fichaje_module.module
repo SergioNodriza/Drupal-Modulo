@@ -1,23 +1,57 @@
 <?php
 
+use Drupal\Core\Database\Database;
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
+
 /**
  * Implements hook_theme().
  */
 
 function fichaje_module_theme($existing, $type, $theme, $path) {
   return array(
+
+    'fichar' => array(
+      'variables' => array('fichaje' => array())
+    ),
     'fichajes_list' => array(
       'variables' => array('results' => array())
     ),
     'empresas_list' => array(
-      'variables' => array('results' => array())
+      'variables' => array('results' => array(), 'actual' => '')
     ),
     'fichajes_usuario' => array(
-      'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => '')
+      'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => array())
     ),
   );
 }
 
 function fichaje_module_page_attachments(array &$page) {
   $page['#attached']['library'][] = 'fichaje_module/fichaje_module_css';
+}
+
+/**
+ * Implements hook_cron().
+ */
+function fichaje_module_cron()
+{
+  $connection = Database::getConnection();
+  $queryService = \Drupal::service('fichaje_module.query_service');
+
+  $usersIds = $queryService->queryUsers($connection);
+
+  foreach ($usersIds as $userId) {
+
+    $user = User::load($userId);
+    $last_fichaje = $queryService->queryLastFichaje($connection, $user);
+
+    if ($last_fichaje['type'] === 'Entrada') {
+
+      $fichaje = Node::load($last_fichaje['id']);
+
+      $last_time = $fichaje->get('field_time_diff_mark')->getValue()[0]['value'] + 1;
+      $fichaje->set('field_time_diff_mark', $last_time);
+      $fichaje->save();
+    }
+  }
 }

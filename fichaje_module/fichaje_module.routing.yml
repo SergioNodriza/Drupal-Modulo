@@ -2,7 +2,6 @@ fichaje.content:
   path: '/fichar/{empresaName}'
   defaults:
     _controller: '\Drupal\fichaje_module\Controller\FichajeController::fichador'
-    _title: 'Fichajes'
     empresaName:
   requirements:
     _permission: 'access content'

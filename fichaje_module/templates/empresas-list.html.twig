@@ -7,12 +7,45 @@
   <hr>
 
   <div class="center">
+
     {%  for empresa in results %}
       <div class="column20">
-        <a href="{{ empresa.link }}">
-          <button><img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100"></button>
+
+        {% if empresa.name == actual.name%}
+
+          {% if actual.type >= 8 %}
+
+            <a href="{{ empresa.link }}?warning=entrada">
+              <button>
+                <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+              </button>
+              <hr class="actualButtonError">
+            </a>
+
+          {% else %}
+
+            <a href="{{ empresa.link }}">
+              <button>
+                <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+              </button>
+              <hr class="actualButtonOK">
+            </a>
+
+          {% endif %}
+
+        {% else %}
+
+          <a href="{{ empresa.link }}">
+            <button>
+              <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+            </button>
+          </a>
+
+        {% endif %}
+
       </div>
     {% endfor %}
+
   </div>
 
 {% endblock %}

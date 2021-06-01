@@ -28,9 +28,24 @@ class EmpresasController extends ControllerBase {
     $connection = Database::getConnection();
     $empresasIds = $this->queryService->queryEmpresasIds($connection);
 
+
+    $last_fichaje = $this->queryService->queryLastFichaje($connection, \Drupal::currentUser());
+    if ($last_fichaje['type'] === self::typeOpen) {
+
+      $actual = [
+        'name' => $last_fichaje['name'],
+        'type' => $last_fichaje['time']
+      ];
+
+    } else {
+      $actual = null;
+    }
+
+
     return array(
       '#theme' => 'empresas_list',
-      '#results' => $this->buttonMakerService->makeButtons($empresasIds)
+      '#results' => $this->buttonMakerService->makeButtons($empresasIds),
+      '#actual' => $actual
     );
   }
 }

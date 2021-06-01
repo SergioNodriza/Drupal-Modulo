@@ -1,0 +1,48 @@
+
+{% extends '@fichaje_module/base.html.twig' %}
+
+{% block body %}
+
+  <h2>Hace más de 8 horas de tu último fichaje de entrada</h2>
+
+  <hr><br>
+
+  <table class="equalDivide">
+    <tr>
+      <th class="center">Fecha</th>
+      <th class="center">Tipo</th>
+      <th class="center">Empresa</th>
+      <th class="center">Tiempo Estimado</th>
+    </tr>
+
+    <tr>
+      <td>{{ fichaje.date }}</td>
+      <td>{{ fichaje.type }}</td>
+
+      {% if fichaje.name == 'NodrizaTech' %}
+        <td class="colorNodriza">{{ fichaje.name }}</td>
+      {% elseif fichaje.name == 'Oniad' %}
+        <td class="colorOniad">{{ fichaje.name }}</td>
+      {% elseif fichaje.name == 'DoctorProperty' %}
+        <td class="colorDoctorProperty">{{ fichaje.name }}</td>
+      {% endif %}
+
+      <td>{{ fichaje.time }} horas</td>
+    </tr>
+  </table>
+
+  <br><hr><br>
+
+  <h2>Fecha y Hora de tu última Saida: </h2>
+  <form class="form-inline" method="post">
+
+    <label for="time"></label>
+    <input type="time" id="time" name="time_filter">
+
+    <label for="date"></label>
+    <input type="date" id="date" name="date_filter">
+
+    <button type="submit">Enviar</button>
+  </form>
+
+{% endblock %}

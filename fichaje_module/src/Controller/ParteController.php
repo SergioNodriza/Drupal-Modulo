@@ -46,6 +46,10 @@ class ParteController extends ControllerBase {
       $week = date('W', strtotime($date));
       $fichajes[$key]['date'] = $this->timeService->formatDate($date);
 
+      if ($fichajes[$key]['type'] === 'Entrada') {
+        $fichajes[$key]['time'] = '';
+      }
+
       if(!isset($arrayWeeks[$week]) ) {
         $arrayWeeks[$week]['fichajes'] = array();
       }

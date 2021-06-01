@@ -23,7 +23,7 @@ class TimeService {
       list($hour,$minute,$second) = explode(':', $time);
       $totalSeconds += $hour*3600;
       $totalSeconds += $minute*60;
-      $totalSeconds += $second;
+      $totalSeconds += $second*1;
 
     }
     return $totalSeconds;
