@@ -115,9 +115,9 @@ class ParteController extends ControllerBase {
     $empresasIds = $this->queryService->queryEmpresasIds($connection);
 
     if (Drupal::request()->getRequestUri() !== '/parte') {
-      return $this->buttonMakerService->makeButtonsParte($empresasIds, true);
+      return $this->buttonMakerService->makeButtons($empresasIds, true);
     }
 
-    return $this->buttonMakerService->makeButtonsParte($empresasIds);
+    return $this->buttonMakerService->makeButtons($empresasIds);
   }
 }

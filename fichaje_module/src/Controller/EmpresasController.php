@@ -41,6 +41,7 @@ class EmpresasController extends ControllerBase {
       $actual = null;
     }
 
+    dd($this->buttonMakerService->makeButtons($empresasIds), $actual);
 
     return array(
       '#theme' => 'empresas_list',

@@ -46,7 +46,13 @@ class QueryService {
     $lastTime = new \DateTime($connection->query($query)->fetch(\PDO::FETCH_COLUMN));
 
     if ($date) {
-      $diff = $lastTime->diff(new \DateTime($date));
+
+      $newDate = new \DateTime($date);
+      if ($lastTime > $newDate) {
+        return false;
+      }
+      $diff = $lastTime->diff($newDate);
+
     } else {
       $diff = $lastTime->diff(new \DateTime());
     }

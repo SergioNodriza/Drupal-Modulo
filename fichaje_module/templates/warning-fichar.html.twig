@@ -37,12 +37,17 @@
   <form class="form-inline" method="post">
 
     <label for="time"></label>
-    <input type="time" id="time" name="time_filter">
+    <input type="time" step="1" id="time" name="time_filter">
 
     <label for="date"></label>
     <input type="date" id="date" name="date_filter">
 
     <button type="submit">Enviar</button>
   </form>
+
+  {% if error == true %}
+    <br><hr>
+    <h2>Error, la fecha de salida es anterior a la fecha de entrada</h2>
+  {% endif %}
 
 {% endblock %}
