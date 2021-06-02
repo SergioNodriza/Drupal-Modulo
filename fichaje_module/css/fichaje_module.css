@@ -15,7 +15,7 @@
   float: left;
 }
 
-.colorNodriza {
+.colorNodrizaTech {
   font-weight: bold;
   color: #905fe7;
 }
@@ -64,7 +64,7 @@
   border: 1px solid #16841b;
 }
 
-.actualButtonError {
+.actualButtonWarning {
   border: 1px solid #ef763e;
 }
 

@@ -7,10 +7,10 @@ fichaje.content:
     _permission: 'access content'
 
 fichaje.warning:
-  path: '/warning/{empresaName}'
+  path: '/aviso/{empresaNameOpen}'
   defaults:
     _controller: '\Drupal\fichaje_module\Controller\WarningController::warning'
-    empresaName:
+    empresaNameOpen:
   requirements:
     _permission: 'access content'
 

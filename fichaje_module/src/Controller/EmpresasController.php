@@ -33,7 +33,7 @@ class EmpresasController extends ControllerBase {
     if ($last_fichaje['type'] === self::typeOpen) {
 
       $actual = [
-        'name' => $last_fichaje['name'],
+        'empresa' => $last_fichaje['empresa'],
         'type' => $last_fichaje['time']
       ];
 
@@ -41,10 +41,15 @@ class EmpresasController extends ControllerBase {
       $actual = null;
     }
 
-    dd($this->buttonMakerService->makeButtons($empresasIds), $actual);
+    if ($actual['type'] >= 8) {
+      $title = ' | Aviso en ' . $actual['empresa'];
+    } else {
+      $title = '';
+    }
 
     return array(
-      '#theme' => 'empresas_list',
+      '#title' => 'Fichador' . $title,
+      '#theme' => 'empresas_fichar',
       '#results' => $this->buttonMakerService->makeButtons($empresasIds),
       '#actual' => $actual
     );

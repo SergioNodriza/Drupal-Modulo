@@ -52,7 +52,7 @@
     <div>
 
       <div class="left">
-        <p><b>Horas en la semana: </b> {{ week.total }} </p>
+        <p><b>Total de Horas: </b> {{ week.total }} </p>
       </div>
 
       <div class="right">
@@ -74,15 +74,7 @@
         <tr>
           <td>{{ fichaje.date }}</td>
           <td>{{ fichaje.type }}</td>
-
-          {% if fichaje.empresa == 'NodrizaTech' %}
-            <td class="colorNodriza">{{ fichaje.empresa }}</td>
-          {% elseif fichaje.empresa == 'Oniad' %}
-            <td class="colorOniad">{{ fichaje.empresa }}</td>
-          {% elseif fichaje.empresa == 'DoctorProperty' %}
-            <td class="colorDoctorProperty">{{ fichaje.empresa }}</td>
-          {% endif %}
-
+          <td class="color{{ fichaje.empresa }}">{{ fichaje.empresa }}</td>
           <td>{{ fichaje.time }}</td>
         </tr>
 

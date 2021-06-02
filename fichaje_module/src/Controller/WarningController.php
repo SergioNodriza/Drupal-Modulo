@@ -25,7 +25,7 @@ class WarningController extends ControllerBase {
   }
 
 
-  public function warning($empresaName)
+  public function warning($empresaNameOpen)
   {
     \Drupal::service("router.builder")->rebuild();
     $user = \Drupal::currentUser();
@@ -34,14 +34,14 @@ class WarningController extends ControllerBase {
     if (($date = \Drupal::request()->get('date_filter')) &&
         ($time = \Drupal::request()->get('time_filter'))) {
 
-      return $this->fix($connection, $user, $empresaName, $date, $time);
+      return $this->fix($connection, $user, $empresaNameOpen, $date, $time);
     }
 
     return $this->twigWarning($connection, $user);
   }
 
 
-  public function fix($connection, $user, $empresaName, $date, $time)
+  public function fix($connection, $user, $empresaNameOpen, $date, $time)
   {
     $dateTime = $date . ' ' . $time;
     $interval = $this->queryService->queryTimeDiff($connection, $user, $dateTime);
@@ -50,12 +50,15 @@ class WarningController extends ControllerBase {
       return $this->twigWarning($connection, $user, true);
     }
 
-    $empresaId = $this->queryService->queryIdEmpresa($connection, $empresaName);
-    $this->createNodeService->createNode($user, self::typeClose, $empresaId, $interval, $dateTime);
-    $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
+    $empresaNameClose = \Drupal::request()->get('empresaNameClose');
+    $empresaIdClose = $this->queryService->queryIdEmpresa($connection, $empresaNameClose);
+    $empresaIdOpen = $this->queryService->queryIdEmpresa($connection, $empresaNameOpen);
 
-    $results[] = $this->createNodeService->resultConfig(self::typeClose, $empresaName, $interval, $time);
-    $results[] = $this->createNodeService->resultConfig(self::typeOpen, $empresaName);
+    $this->createNodeService->createNode($user, self::typeClose, $empresaIdClose, $interval, $dateTime);
+    $this->createNodeService->createNode($user, self::typeOpen, $empresaIdOpen);
+
+    $results[] = $this->createNodeService->resultConfig(self::typeClose, $empresaNameClose, $interval, $time);
+    $results[] = $this->createNodeService->resultConfig(self::typeOpen, $empresaNameOpen);
 
     return array(
       '#title' => 'Fichajes',
@@ -72,7 +75,7 @@ class WarningController extends ControllerBase {
     $fichaje['date'] = $this->timeService->formatDate($fichaje['date']);
 
     return array(
-      '#title' => 'Fichar',
+      '#title' => 'Corrección Fichaje',
       '#theme' => 'warning_fichar',
       '#fichaje' => $fichaje,
       '#error' => $error

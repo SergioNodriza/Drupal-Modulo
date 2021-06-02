@@ -16,7 +16,7 @@ class QueryService {
   public function queryLastFichaje($connection, $user)
   {
     $query = sprintf("select nftm.entity_id as id, nfum.field_user_mark_target_id as user, nftm.field_type_mark_value as type,
-                                    nfd.title as name, field_date_mark_value as date, nftdm.field_time_diff_mark_value as time
+                                    nfd.title as empresa, field_date_mark_value as date, nftdm.field_time_diff_mark_value as time
                             from node__field_date_mark nfdm
                             join node__field_type_mark nftm on nfdm.entity_id = nftm.entity_id
                             join node__field_user_mark nfum on nfdm.entity_id = nfum.entity_id

@@ -3,16 +3,17 @@
 
 {% block body %}
 
-  <hr>
+  <hr><br>
 
   <ul>
     {%  for fichaje in results %}
       <li>
-        <b>{{ fichaje.type }}:</b> {{ fichaje.empresa }} - {{ fichaje.date }}
+        <b>{{ fichaje.type }}:</b> <span class="color{{ fichaje.empresa }}">{{ fichaje.empresa }}</span> - {{ fichaje.date }}
         {% if fichaje.time %}
           <ul><li><b> Tiempo:</b> {{ fichaje.time }}</li></ul>
         {% endif %}
       </li>
+      <br>
     {% endfor %}
   </ul>
 

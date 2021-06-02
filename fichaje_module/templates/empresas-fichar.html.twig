@@ -3,23 +3,22 @@
 
 {% block body %}
 
-  <h1 class="js-quickedit-page-title title page-title">Fichador</h1>
-  <hr>
+  <hr><br>
 
   <div class="center">
 
     {%  for empresa in results %}
       <div class="column20">
 
-        {% if empresa.name == actual.name%}
+        {% if empresa.name == actual.empresa%}
 
           {% if actual.type >= 8 %}
 
-            <a href="/warning/{{ empresa.name }}">
+            <a href="/aviso/{{ empresa.name }}">
               <button>
                 <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
               </button>
-              <hr class="actualButtonError">
+              <hr class="actualButtonWarning">
             </a>
 
           {% else %}
@@ -35,11 +34,23 @@
 
         {% else %}
 
-          <a href="/fichar/{{ empresa.name }}">
-            <button>
-              <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
-            </button>
-          </a>
+          {% if actual.type >= 8 %}
+
+            <a href="/aviso/{{ empresa.name }}">
+              <button>
+                <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+              </button>
+            </a>
+
+          {% else %}
+
+            <a href="/fichar/{{ empresa.name }}">
+              <button>
+                <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+              </button>
+            </a>
+
+          {% endif %}
 
         {% endif %}
 

@@ -36,13 +36,13 @@ class FichajeController extends ControllerBase {
 
       $interval = $this->queryService->queryTimeDiff($connection, $user);
 
-      if ($last_fichaje['name'] !== $empresaName) {
+      if ($last_fichaje['empresa'] !== $empresaName) {
 
-        $old_empresaID = $this->queryService->queryIdEmpresa($connection, $last_fichaje['name']);
+        $old_empresaID = $this->queryService->queryIdEmpresa($connection, $last_fichaje['empresa']);
         $this->createNodeService->createNode($user, self::typeClose, $old_empresaID, $interval);
         $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
 
-        $results[] = $this->createNodeService->resultConfig(self::typeClose, $last_fichaje['name'], $interval);
+        $results[] = $this->createNodeService->resultConfig(self::typeClose, $last_fichaje['empresa'], $interval);
         $results[] = $this->createNodeService->resultConfig(self::typeOpen, $empresaName);
 
       } else {
