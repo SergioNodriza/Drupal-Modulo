@@ -5,6 +5,10 @@
 
   <hr><br>
 
+  <div class="left">
+    <button onclick="reset()">Principal</button>
+  </div>
+
   <div class="right">
     <button onclick="showHide()">Filtros</button>
   </div>
@@ -81,7 +85,11 @@
           <td>{{ fichaje.date }}</td>
           <td>{{ fichaje.type }}</td>
           <td class="color{{ fichaje.empresa }}">{{ fichaje.empresa }}</td>
-          <td>{{ fichaje.time }}</td>
+          {% if fichaje.type == "Entrada" %}
+            <td class="colorTime">{{ fichaje.time }} | Estimado</td>
+          {% else %}
+            <td>{{ fichaje.time }}</td>
+          {% endif %}
         </tr>
 
       {% endfor %}

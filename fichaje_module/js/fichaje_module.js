@@ -18,3 +18,7 @@ function showHideTables(key) {
       x.style.visibility = "collapse";
     }
 }
+
+function reset () {
+  window.location.replace("/parte");
+}

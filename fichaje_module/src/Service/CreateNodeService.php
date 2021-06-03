@@ -31,7 +31,7 @@ class CreateNodeService {
       $node->set('field_time_diff_mark', $interval);
     } else {
       $node->set('field_date_mark', $date);
-      $node->set('field_time_diff_mark', '0');
+      $node->set('field_time_diff_mark', '00:00:00');
     }
 
     $node->set('field_type_mark', $type);

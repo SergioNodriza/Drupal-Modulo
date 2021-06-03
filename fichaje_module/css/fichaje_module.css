@@ -68,6 +68,10 @@
   border: 1px solid #ef763e;
 }
 
+.colorTime {
+  color: #bf1d5e;
+}
+
 .form-inline {
   display: flex;
   flex-flow: row wrap;

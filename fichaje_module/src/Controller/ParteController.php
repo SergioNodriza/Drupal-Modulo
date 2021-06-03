@@ -138,7 +138,7 @@ class ParteController extends ControllerBase {
         }
       }
 
-      $arrayWeeks[$key]['total'] = $this->timeService->formatSeconds($totalSeconds);
+      $arrayWeeks[$key]['total'] = gmdate('H:i:s', $totalSeconds);
     }
     return $arrayWeeks;
   }

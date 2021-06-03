@@ -37,6 +37,7 @@ function fichaje_module_cron()
 {
   $connection = Database::getConnection();
   $queryService = \Drupal::service('fichaje_module.query_service');
+  $timeService = \Drupal::service('fichaje_module.time_service');
 
   $usersIds = $queryService->queryUsers($connection);
 
@@ -49,8 +50,13 @@ function fichaje_module_cron()
 
       $fichaje = Node::load($last_fichaje['id']);
 
-      $last_time = $fichaje->get('field_time_diff_mark')->getValue()[0]['value'] + 1;
-      $fichaje->set('field_time_diff_mark', $last_time);
+      $last_time = $fichaje->get('field_time_diff_mark')->getValue()[0]['value'];
+
+      $seconds = $timeService->timeToSeconds($last_time);
+      $seconds += 3600;
+      $newTime = gmdate("H:i:s", $seconds);
+
+      $fichaje->set('field_time_diff_mark', $newTime);
       $fichaje->save();
     }
   }
