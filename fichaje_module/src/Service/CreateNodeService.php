@@ -17,7 +17,7 @@ class CreateNodeService {
       $dateInterval = date('Y-m-d\TH:i:s', strtotime($dateFix));
       $dateTitle = date('d-m-Y H:i:s', strtotime($dateFix));
     } else {
-      $date = date('Y-m-d\TH:i:s');
+      $date = date('Y-m-d\TH:i:s', strtotime(date('Y-m-d\TH:i:s'))+1);
       $dateInterval = date('Y-m-d\TH:i:s');
       $dateTitle = date('d-m-Y H:i:s');
     }

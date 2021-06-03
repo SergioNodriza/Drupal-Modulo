@@ -20,7 +20,7 @@ function fichaje_module_theme($existing, $type, $theme, $path) {
     'empresas_fichar' => array(
       'variables' => array('results' => array(), 'actual' => '')
     ),
-    'fichajes_usuario' => array(
+    'usuario_fichajes' => array(
       'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => array())
     ),
   );

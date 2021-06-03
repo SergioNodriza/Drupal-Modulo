@@ -30,14 +30,14 @@ class ParteController extends ControllerBase {
     $user = Drupal::currentUser();
     $connection = Database::getConnection();
 
-    $dateFilter = $_POST['date_filter'];
-    $linkFilter = $_POST['link'];
-    $this->tryRedirect($linkFilter, $dateFilter);
+    $this->redirectByFilters($_POST['link'], $_POST['date_filter'], $_POST['week_filter']);
 
-    $date = Drupal::request()->get('date_filter');
     if (!$empresaName) {$empresaName = '%';}
-    $fichajes = $this->queryService->queryFichajesUsuario($connection, $user, $empresaName, $date . '%');
 
+    $date_filter = Drupal::request()->get('date_filter');
+    $week_filter = Drupal::request()->get('week_filter');
+
+    $fichajes = $this->getFichajesByFilters($connection, $user, $empresaName, $date_filter, $week_filter);
 
     $arrayWeeks = array();
     foreach($fichajes as $key => $fichaje) {
@@ -45,10 +45,6 @@ class ParteController extends ControllerBase {
       $date = $fichaje['date'];
       $week = date('W', strtotime($date));
       $fichajes[$key]['date'] = $this->timeService->formatDate($date);
-
-      if ($fichajes[$key]['type'] === 'Entrada') {
-        $fichajes[$key]['time'] = '';
-      }
 
       if(!isset($arrayWeeks[$week]) ) {
         $arrayWeeks[$week]['fichajes'] = array();
@@ -61,9 +57,9 @@ class ParteController extends ControllerBase {
 
       $totalSeconds = 0;
       foreach ($arrayWeek['fichajes'] as $key2 => $fichaje) {
-        $time = $fichaje['time'];
-        if ($time !== '') {
-          $totalSeconds += $this->timeService->timeToSeconds($time);
+
+        if ($fichaje['type'] === 'Salida') {
+          $totalSeconds += $this->timeService->timeToSeconds($fichaje['time']);
         }
       }
 
@@ -78,15 +74,15 @@ class ParteController extends ControllerBase {
 
     return array(
       '#title' => $title,
-      '#theme' => 'fichajes_usuario',
+      '#theme' => 'usuario_fichajes',
       '#results' => $arrayWeeks,
       '#buttons' => $this->buttons($connection),
-      '#route' => Drupal::routeMatch()->getParameter('empresaName')
+      '#route' => Drupal::routeMatch()->getParameter('empresaName') ?? 'General'
     );
   }
 
 
-  public function tryRedirect($linkFilter, $dateFilter)
+  public function redirectByFilters($linkFilter, $dateFilter, $week = false)
   {
     $url = null;
 
@@ -100,6 +96,12 @@ class ParteController extends ControllerBase {
 
     if ($dateFilter) {
       $url .= '?date_filter=' . $dateFilter;
+
+      if ($week) {
+        $url .= '&week_filter=' . date('W', strtotime($dateFilter));
+      }
+    } elseif ($week) {
+      $url .= '?week_filter=' . date('W', strtotime($dateFilter));
     }
 
     if ($url) {
@@ -119,5 +121,38 @@ class ParteController extends ControllerBase {
     }
 
     return $this->buttonMakerService->makeButtons($empresasIds);
+  }
+
+  public function getFichajesByFilters($connection, $user, $empresaName, $date_filter, $week_filter)
+  {
+    $params = [];
+    $params['userId'] = $user->id();
+
+    if ($empresaName) {$params['empresaName'] = $empresaName;}
+
+    if ($date_filter && !$week_filter) {$params['date_filter'] = $date_filter;}
+
+    if ($week_filter) {
+
+      if ($date_filter) {
+        $date = $date_filter;
+      }
+      else {
+        $date = date('Y-m-d');
+      }
+
+      $week = date('W', strtotime($date));
+      $year = date('Y', strtotime($date));
+
+      $daysWeek = [];
+      for($day=1; $day<8; $day++)
+      {
+        $daysWeek[] = date('Y-m-d', strtotime($year."W".$week.$day));
+      }
+
+      $params['week_filter'] = $daysWeek;
+    }
+
+    return $this->queryService->queryFichajesUsuario($connection, $params);
   }
 }

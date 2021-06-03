@@ -11,7 +11,7 @@
 
   <div class="center" id="hideShow">
 
-    <form method="post">
+    <form method="get">
 
       {% for button in buttons %}
 
@@ -37,10 +37,16 @@
 
       {% endfor %}
 
-      <label for="date"></label>
-      <input type="date" id="date" name="date_filter">
+      <div class="center">
 
-      <input type="submit" value="Filtrar">
+        <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week">Semana</label>
+        <br>
+        <label for="date" class="label"><input type="date" id="date" name="date_filter"></label>
+
+        <input type="submit" value="Filtrar">
+
+      </div>
+
     </form>
 
   </div>

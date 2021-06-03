@@ -76,7 +76,7 @@ class QueryService {
     return "$hours:$minutes:$totalSeconds";
   }
 
-  public function queryFichajesUsuario($connection, $user, $empresaName, $dateFilter)
+  public function queryFichajesUsuario($connection, $params = array())
   {
     $query = sprintf("select nfdm.field_date_mark_value as date, nftm.field_type_mark_value as type,
                                 nfd.title as empresa, coalesce(nftdm.field_time_diff_mark_value, '') as time
@@ -86,8 +86,32 @@ class QueryService {
                                      join node__field_empresa_mark nfem on nfdm.entity_id = nfem.entity_id
                                      join node_field_data nfd on nfd.nid = nfem.field_empresa_mark_target_id
                                      left join node__field_time_diff_mark nftdm on nfdm.entity_id = nftdm.entity_id
-                            where nfum.field_user_mark_target_id like '%s' and nfd.title like '%s' and nfdm.field_date_mark_value like '%s'
-                            order by nfdm.field_date_mark_value desc", $user->id(), $empresaName, $dateFilter);
+                            where nfum.field_user_mark_target_id like '%s'", $params['userId']);
+
+    if ($params['empresaName']) {
+      $query .= sprintf(" and nfd.title like '%s'", $params['empresaName']);
+    }
+
+    if ($params['date_filter']) {
+      $query .= sprintf(" and nfdm.field_date_mark_value like '%s'", $params['date_filter'] . '%');
+    }
+
+    if ($params['week_filter']) {
+
+      foreach ($params['week_filter'] as $key => $value) {
+
+        if ($key === 0) {
+          $query .= sprintf(" and (nfdm.field_date_mark_value like '%s'", $value . '%');
+        }
+        else {
+          $query .= sprintf(" or nfdm.field_date_mark_value like '%s'", $value . '%');
+        }
+      }
+
+      $query .= ')';
+    }
+
+    $query .= " order by nfdm.field_date_mark_value desc";
 
     return $connection->query($query)->fetchAll(\PDO::FETCH_ASSOC);
   }
