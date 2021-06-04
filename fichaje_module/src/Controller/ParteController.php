@@ -27,12 +27,18 @@ class ParteController extends ControllerBase {
   public function parte($empresaName)
   {
     Drupal::service("router.builder")->rebuild();
-    $this->redirectByFilters($_POST['link'], $_POST['date_filter'], $_POST['week_filter']);
+    $this->redirectByFilters($_POST['empresa'], $_POST['date_filter'], $_POST['week_filter'], $_POST['submit']);
 
     $user = Drupal::currentUser();
     $connection = Database::getConnection();
+    $filters = Drupal::request()->get('filters');
     $date_filter = Drupal::request()->get('date_filter');
-    $week_filter = Drupal::request()->get('week_filter');
+
+    if (!$filters) {
+      $week_filter = date('W', strtotime(date('Y-m-d')));
+    } else {
+      $week_filter = Drupal::request()->get('week_filter');
+    }
 
     $fichajes = $this->getFichajesByFilters($connection, $user, $empresaName, $date_filter, $week_filter);
     $arrayWeeks = $this->groupFichajesByWeekAndFormat($fichajes);
@@ -43,31 +49,45 @@ class ParteController extends ControllerBase {
       '#theme' => 'usuario_fichajes',
       '#results' => $arrayCompleted,
       '#buttons' => $this->buttons($connection),
-      '#route' => Drupal::routeMatch()->getParameter('empresaName') ?? 'General'
+      '#route' => Drupal::routeMatch()->getParameter('empresaName') ?? 'general',
+      '#date' => $this->getDate($date_filter, $week_filter),
+      '#isWeek' => !empty($week_filter)
     );
   }
 
 
-  public function redirectByFilters($linkFilter, $dateFilter, $weekFilter = false)
+  public function redirectByFilters($empresaFilter, $dateFilter, $weekFilter, $submit)
   {
     $url = null;
 
-    if ($linkFilter) {
-      if ($linkFilter === 'General') {
+    if ($empresaFilter) {
+      if ($empresaFilter === 'general') {
           $url .= '/parte';
         } else {
-          $url .= '/parte/' . $linkFilter;
+          $url .= '/parte/' . $empresaFilter;
         }
     }
 
     if ($dateFilter) {
       $url .= '?date_filter=' . $dateFilter;
+    }
 
-      if ($weekFilter) {
+    if ($weekFilter) {
+
+      if ($dateFilter) {
         $url .= '&week_filter=' . date('W', strtotime($dateFilter));
+      } else {
+        $url .= '?week_filter=' . date('W', strtotime(date('Y-m-d')));
       }
-    } elseif ($weekFilter) {
-      $url .= '?week_filter=' . date('W', strtotime(date('Y-m-d')));
+
+    }
+
+    if ($submit) {
+      if ($weekFilter || $dateFilter) {
+        $url .= '&filters=submit';
+      } else {
+        $url .= '?filters=submit';
+      }
     }
 
     if ($url) {
@@ -82,32 +102,12 @@ class ParteController extends ControllerBase {
     $params['userId'] = $user->id();
 
     if ($empresaName) {$params['empresaName'] = $empresaName;}
+    if ($week_filter) {$params['week_filter'] = $week_filter;}
+    elseif ($date_filter) {$params['date_filter'] = $date_filter;}
 
-    if ($date_filter && !$week_filter) {$params['date_filter'] = $date_filter;}
-
-    if ($week_filter) {
-
-      if ($date_filter) {
-        $date = $date_filter;
-      }
-      else {
-        $date = date('Y-m-d');
-      }
-
-
-      $year = date('Y', strtotime($date));
-
-      $daysWeek = [];
-      for($day=1; $day<8; $day++) {
-        $daysWeek[] = date('Y-m-d', strtotime($year."W".$week_filter.$day));
-      }
-
-      $params['week_filter'] = $daysWeek;
-    }
 
     return $this->queryService->queryFichajesUsuario($connection, $params);
   }
-
   public function groupFichajesByWeekAndFormat($fichajes) {
 
     $arrayWeeks = array();
@@ -125,7 +125,6 @@ class ParteController extends ControllerBase {
 
     return $arrayWeeks;
   }
-
   public function getTotalsByWeek($arrayWeeks) {
 
     foreach ($arrayWeeks as $key => $arrayWeek) {
@@ -171,10 +170,8 @@ class ParteController extends ControllerBase {
 
     return $title;
   }
-
   public function buttons($connection)
   {
-
     $empresasIds = $this->queryService->queryEmpresasIds($connection);
 
     if (Drupal::request()->getRequestUri() !== '/parte') {
@@ -182,5 +179,17 @@ class ParteController extends ControllerBase {
     }
 
     return $this->buttonMakerService->makeButtons($empresasIds);
+  }
+  public function getDate($date_filter, $week_filter) {
+
+    if ($date_filter) {
+      return date('Y-m-d', strtotime($date_filter));
+    }
+
+    if ($week_filter) {
+      return date('Y-m-d');
+    }
+
+    return '';
   }
 }

@@ -20,7 +20,7 @@ class ButtonMakerService {
 
     if ($back) {
       $buttons[] = [
-        'name' => 'General',
+        'name' => 'general',
         'image' => file_create_url("public://2021-05/arrow.png"),
       ];
     }

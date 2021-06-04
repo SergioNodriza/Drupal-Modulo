@@ -94,18 +94,7 @@ class QueryService {
     }
 
     if ($params['week_filter']) {
-
-      foreach ($params['week_filter'] as $key => $value) {
-
-        if ($key === 0) {
-          $query .= sprintf(" and (nfdm.field_date_mark_value like '%s'", $value . '%');
-        }
-        else {
-          $query .= sprintf(" or nfdm.field_date_mark_value like '%s'", $value . '%');
-        }
-      }
-
-      $query .= ')';
+      $query .= sprintf(" and extract(week from nfdm.field_date_mark_value) = '%s'", $params['week_filter']);
     }
 
     $query .= " order by nfdm.field_date_mark_value desc";

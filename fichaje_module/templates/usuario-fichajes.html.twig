@@ -21,7 +21,7 @@
 
           <div class="column10">
             <label>
-              <input type="radio" name="link" value="{{ button.name }}" checked="checked">
+              <input type="radio" name="empresa" value="{{ button.name }}" checked="checked">
               <img src="{{ button.image }}" alt="{{ button.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
             </label>
           </div>
@@ -30,7 +30,7 @@
 
           <div class="column10">
             <label>
-              <input type="radio" name="link" value="{{ button.name }}">
+              <input type="radio" name="empresa" value="{{ button.name }}">
               <img src="{{ button.image }}" alt="{{ button.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
             </label>
           </div>
@@ -41,15 +41,19 @@
 
       <div class="form-inline">
         <div class="center">
-          <label for="date" class="label"><input type="date" id="date" name="date_filter" value="{{ theme.getDateEnd|date("Y-m-d") }}"></label>
+          <label for="date" class="label"><input type="date" id="date" name="date_filter" value="{{ date }}"></label>
           <button type="button" onclick="clearValue('date')">X</button>
         </div>
       </div>
 
       <div class="form-inline">
         <div class="center">
-          <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week">Semana Completa</label>
-          <input type="submit" value="Filtrar">
+          {% if isWeek == true %}
+            <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week" checked>Semana Completa</label>
+          {% else %}
+            <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week">Semana Completa</label>
+          {% endif %}
+          <button type="submit" name="submit" value="submit">Filtrar</button>
         </div>
       </div>
 

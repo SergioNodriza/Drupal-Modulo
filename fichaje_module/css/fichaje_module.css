@@ -60,12 +60,16 @@
   outline: 2px solid #282525;
 }
 
-.actualButtonOK {
+.hrOk {
   border: 1px solid #16841b;
 }
 
-.actualButtonWarning {
+.hrWarning {
   border: 1px solid #ef763e;
+}
+
+.hrBase {
+  border: 1px solid #bbb4b2;
 }
 
 .colorTime {
