@@ -19,6 +19,8 @@ function showHideTables(key) {
     }
 }
 
-function reset () {
-  window.location.replace("/parte");
+function clearValue(key)
+{
+  const x = document.getElementById(key);
+  x.value = '';
 }

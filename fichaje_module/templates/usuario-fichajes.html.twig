@@ -5,13 +5,11 @@
 
   <hr><br>
 
-  <div class="left">
-    <button onclick="reset()">Principal</button>
-  </div>
-
   <div class="right">
     <button onclick="showHide()">Filtros</button>
   </div>
+
+  <br>
 
   <div class="center" id="hideShow">
 
@@ -41,21 +39,27 @@
 
       {% endfor %}
 
-      <div class="center">
-
-        <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week">Semana</label>
-        <br>
-        <label for="date" class="label"><input type="date" id="date" name="date_filter"></label>
-
-        <input type="submit" value="Filtrar">
-
+      <div class="form-inline">
+        <div class="center">
+          <label for="date" class="label"><input type="date" id="date" name="date_filter" value="{{ theme.getDateEnd|date("Y-m-d") }}"></label>
+          <button type="button" onclick="clearValue('date')">X</button>
+        </div>
       </div>
+
+      <div class="form-inline">
+        <div class="center">
+          <label for="week" class="label"><input type="checkbox" id="week" name="week_filter" value="week">Semana Completa</label>
+          <input type="submit" value="Filtrar">
+        </div>
+      </div>
+
+      <br>
 
     </form>
 
   </div>
 
-  <br><br><hr><br>
+  <br><hr><br>
 
   {% for key, week in results %}
 

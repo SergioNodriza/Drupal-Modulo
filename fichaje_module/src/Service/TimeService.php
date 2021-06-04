@@ -4,7 +4,7 @@ namespace Drupal\fichaje_module\Service;
 
 class TimeService {
 
-  const diasSemana = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
   public function formatDate($date)
   {
@@ -27,5 +27,14 @@ class TimeService {
 
     }
     return $totalSeconds;
+  }
+
+  public function doubleValue($time)
+  {
+    if (strlen($time) <2) {
+      $time = '0' . $time;
+    }
+
+    return $time;
   }
 }

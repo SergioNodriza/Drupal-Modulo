@@ -74,16 +74,16 @@
 
 .form-inline {
   display: flex;
-  flex-flow: row wrap;
   align-items: center;
+  justify-content: center
 }
 
 .form-inline input {
-  margin: 5px 10px 5px 0;
-  padding: 10px;
+  margin: 5px 2px 5px 0;
+  padding: 7px;
 }
 
 .form-inline button {
-  padding: 5px 5px;
+  padding: 6px;
   cursor: pointer;
 }
