@@ -95,6 +95,7 @@ class QueryService {
 
     if ($params['week_filter']) {
       $query .= sprintf(" and extract(week from nfdm.field_date_mark_value) = '%s'", $params['week_filter']);
+      $query .= sprintf(" and extract(year from nfdm.field_date_mark_value) = '%s'", $params['year_filter']);
     }
 
     $query .= " order by nfdm.field_date_mark_value desc";

@@ -45,7 +45,7 @@ class ParteController extends ControllerBase {
     $arrayCompleted = $this->getTotalsByWeek($arrayWeeks);
 
     return array(
-      '#title' => $this->formatTitle($empresaName, $date_filter, $week_filter),
+      '#title' => $this->formatTitle($empresaName),
       '#theme' => 'usuario_fichajes',
       '#results' => $arrayCompleted,
       '#buttons' => $this->buttons($connection),
@@ -102,7 +102,11 @@ class ParteController extends ControllerBase {
     $params['userId'] = $user->id();
 
     if ($empresaName) {$params['empresaName'] = $empresaName;}
-    if ($week_filter) {$params['week_filter'] = $week_filter;}
+    if ($week_filter) {
+      $params['week_filter'] = $week_filter;
+      if ($date_filter) {$params['year_filter'] = date('Y', strtotime($date_filter));}
+      else {$params['year_filter'] = date('Y');}
+    }
     elseif ($date_filter) {$params['date_filter'] = $date_filter;}
 
 
@@ -142,7 +146,7 @@ class ParteController extends ControllerBase {
     return $arrayWeeks;
   }
 
-  public function formatTitle($empresaName, $date_filter, $week_filter) {
+  public function formatTitle($empresaName) {
 
     $title = 'Parte de Horas ';
 
@@ -152,29 +156,14 @@ class ParteController extends ControllerBase {
       $title .= 'de ' . $empresaName;
     }
 
-    if ($date_filter && !$week_filter) {
-      $title .= ' | Filtro día ' . date('d/m/Y', strtotime($date_filter));
-    }
-
-    if ($week_filter) {
-
-      if ($date_filter) {
-        $date = $date_filter;
-      }
-      else {
-        $date = date('Y-m-d');
-      }
-
-      $title .= ' | Filtro semana del ' . date('d/m/Y', strtotime($date));
-    }
-
     return $title;
   }
   public function buttons($connection)
   {
     $empresasIds = $this->queryService->queryEmpresasIds($connection);
+    $uri = Drupal::request()->getRequestUri();
 
-    if (Drupal::request()->getRequestUri() !== '/parte') {
+    if ($uri !== '/parte' && !str_starts_with($uri, '/parte?')) {
       return $this->buttonMakerService->makeButtons($empresasIds, true);
     }
 
