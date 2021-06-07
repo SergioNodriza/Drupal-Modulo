@@ -13,11 +13,13 @@ class FichajeController extends ControllerBase {
   const typeOpen = 'Entrada';
   const typeClose = 'Salida';
 
+  private $timeService;
   private $queryService;
   private $createNodeService;
 
   public function __construct()
   {
+    $this->timeService = \Drupal::service('fichaje_module.time_service');
     $this->queryService = \Drupal::service('fichaje_module.query_service');
     $this->createNodeService = \Drupal::service('fichaje_module.create_node_service');
   }
@@ -34,7 +36,7 @@ class FichajeController extends ControllerBase {
 
     if ($last_fichaje['type'] === self::typeOpen) {
 
-      $interval = $this->queryService->queryTimeDiff($connection, $user);
+      $interval = $this->timeService->timeDiff($last_fichaje['date']);
 
       if ($last_fichaje['empresa'] !== $empresaName) {
 

@@ -12,6 +12,8 @@ use Drupal\Core\Database\Database;
 
 class ParteController extends ControllerBase {
 
+  const typeOpen = 'Entrada';
+
   private $timeService;
   private $queryService;
   private $buttonMakerService;
@@ -48,7 +50,7 @@ class ParteController extends ControllerBase {
       '#title' => $this->formatTitle($empresaName),
       '#theme' => 'usuario_fichajes',
       '#results' => $arrayCompleted,
-      '#buttons' => $this->buttons($connection),
+      '#buttons' => $this->buttons($connection, $user),
       '#route' => Drupal::routeMatch()->getParameter('empresaName') ?? 'general',
       '#date' => $this->getDate($date_filter, $week_filter),
       '#isWeek' => !empty($week_filter)
@@ -118,9 +120,13 @@ class ParteController extends ControllerBase {
     foreach($fichajes as $key => $fichaje) {
 
       $date = $fichaje['date'];
-      $week = date('W', strtotime($date));
       $fichajes[$key]['date'] = $this->timeService->formatDate($date);
 
+      if ($fichajes[$key]['type'] === self::typeOpen) {
+        $fichajes[$key]['time'] = $this->timeService->formatDate($fichajes[$key]['time']);
+      }
+
+      $week = date('W', strtotime($date));
       if(!isset($arrayWeeks[$week]) ) {
         $arrayWeeks[$week]['fichajes'] = array();
       }
@@ -158,9 +164,9 @@ class ParteController extends ControllerBase {
 
     return $title;
   }
-  public function buttons($connection)
+  public function buttons($connection, $user)
   {
-    $empresasIds = $this->queryService->queryEmpresasIds($connection);
+    $empresasIds = $this->queryService->queryEmpresasIds($connection, $user);
     $uri = Drupal::request()->getRequestUri();
 
     if ($uri !== '/parte' && !str_starts_with($uri, '/parte?')) {

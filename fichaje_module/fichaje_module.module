@@ -14,6 +14,9 @@ function fichaje_module_theme($existing, $type, $theme, $path) {
     'warning_fichar' => array(
       'variables' => array('fichaje' => array(), 'error' => '')
     ),
+    'no_warning_fichar' => array(
+
+    ),
     'result_fichar' => array(
       'variables' => array('results' => array())
     ),
@@ -37,10 +40,8 @@ function fichaje_module_cron()
 {
   $connection = Database::getConnection();
   $queryService = \Drupal::service('fichaje_module.query_service');
-  $timeService = \Drupal::service('fichaje_module.time_service');
 
-  $usersIds = $queryService->queryUsers($connection);
-
+  $usersIds = $queryService->queryUsersIds($connection);
   foreach ($usersIds as $userId) {
 
     $user = User::load($userId);
@@ -49,14 +50,7 @@ function fichaje_module_cron()
     if ($last_fichaje['type'] === 'Entrada') {
 
       $fichaje = Node::load($last_fichaje['id']);
-
-      $last_time = $fichaje->get('field_time_diff_mark')->getValue()[0]['value'];
-
-      $seconds = $timeService->timeToSeconds($last_time);
-      $seconds += 3600;
-      $newTime = gmdate("H:i:s", $seconds);
-
-      $fichaje->set('field_time_diff_mark', $newTime);
+      $fichaje->set('field_time_diff_mark', date('Y-m-d\TH:i:s'));
       $fichaje->save();
     }
   }

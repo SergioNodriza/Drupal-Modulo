@@ -12,7 +12,7 @@
 
         {% if empresa.name == actual.empresa%}
 
-          {% if actual.type >= 8 %}
+          {% if actual.time >= actual.limit %}
 
             <a href="/aviso/{{ empresa.name }}">
               <button>
@@ -34,7 +34,7 @@
 
         {% else %}
 
-          {% if actual.type >= 8 %}
+        {% if actual.time >= actual.limit %}
 
             <a href="/aviso/{{ empresa.name }}">
               <button>

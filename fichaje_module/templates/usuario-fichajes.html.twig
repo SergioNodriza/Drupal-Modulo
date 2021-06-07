@@ -94,7 +94,7 @@
           <td>{{ fichaje.type }}</td>
           <td class="color{{ fichaje.empresa }}">{{ fichaje.empresa }}</td>
           {% if fichaje.type == "Entrada" %}
-            <td class="colorTime">{{ fichaje.time }} | Estimado</td>
+            <td class="colorTime">{{ fichaje.time }}</td>
           {% else %}
             <td>{{ fichaje.time }}</td>
           {% endif %}

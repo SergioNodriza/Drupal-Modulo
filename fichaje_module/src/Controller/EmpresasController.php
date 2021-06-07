@@ -5,6 +5,7 @@
  */
 namespace Drupal\fichaje_module\Controller;
 
+use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 
@@ -13,32 +14,39 @@ class EmpresasController extends ControllerBase {
   const typeOpen = 'Entrada';
   const typeClose = 'Salida';
 
+  private $timeService;
   private $queryService;
   private $buttonMakerService;
 
   public function __construct()
   {
-    $this->queryService = \Drupal::service('fichaje_module.query_service');
-    $this->buttonMakerService = \Drupal::service('fichaje_module.button_maker_service');
+    $this->timeService = Drupal::service('fichaje_module.time_service');
+    $this->queryService = Drupal::service('fichaje_module.query_service');
+    $this->buttonMakerService = Drupal::service('fichaje_module.button_maker_service');
   }
 
   public function empresas()
   {
-    \Drupal::service("router.builder")->rebuild();
+    Drupal::service("router.builder")->rebuild();
+    $user = Drupal::currentUser();
     $connection = Database::getConnection();
-    $empresasIds = $this->queryService->queryEmpresasIds($connection);
+    $empresasIds = $this->queryService->queryEmpresasIds($connection, $user);
 
-
-    $last_fichaje = $this->queryService->queryLastFichaje($connection, \Drupal::currentUser());
+    $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
     if ($last_fichaje['type'] === self::typeOpen) {
 
+      $time = $this->timeService->timeDiff($last_fichaje['date'], $last_fichaje['time']);
       $actual = [
         'empresa' => $last_fichaje['empresa'],
-        'type' => $last_fichaje['time']
+        'time' => $time,
+        'limit' => $this->queryService->queryUserHours($connection, $user->id())
       ];
 
     } else {
-      $actual = null;
+      $actual = [
+        'time' => '0',
+        'limit' => '1',
+      ];
     }
 
     if ($actual['type'] >= 8) {
