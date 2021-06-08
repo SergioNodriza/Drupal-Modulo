@@ -28,3 +28,11 @@ fichaje.parte:
     empresaName:
   requirements:
     _permission: 'access content'
+
+fichaje.partes:
+  path: '/partes'
+  defaults:
+    _controller: '\Drupal\fichaje_module\Controller\AdminController::admin'
+    user:
+  requirements:
+    _permission: 'access content'

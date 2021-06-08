@@ -1,4 +1,4 @@
-function showHide() {
+function showHideFilters() {
   const x = document.getElementById("hideShow");
 
   if (x.style.display === "none") {
@@ -8,7 +8,7 @@ function showHide() {
   }
 }
 
-function showHideTables(key) {
+function showHide(key) {
 
   const x = document.getElementById(key);
 

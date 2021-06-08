@@ -62,6 +62,11 @@ class TimeService {
 
     $totalSeconds = ($daysInSecs + $hoursInSecs + $minsInSecs + $diff->s);
 
+    return $this->secondsToTime($totalSeconds);
+  }
+
+  public function secondsToTime($totalSeconds)
+  {
     $hours = floor($totalSeconds / 3600);
     $hours = $this->doubleValue($hours);
 

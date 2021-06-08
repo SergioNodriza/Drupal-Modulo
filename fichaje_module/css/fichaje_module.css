@@ -3,6 +3,18 @@
   text-align: center;
 }
 
+.column10 {
+  display: inline-block;
+  width: 10%;
+  padding: 10px;
+}
+
+.column20 {
+  display: inline-block;
+  width: 20%;
+  padding: 10px;
+}
+
 .center {
   text-align: center;
 }
@@ -30,34 +42,19 @@
   color: #31cee2;
 }
 
-.column10 {
-  display: inline-block;
-  width: 10%;
-  padding: 10px;
+.colorOk {
+  font-weight: bold;
+  color: #0d9a55;
 }
 
-.column20 {
-  display: inline-block;
-  width: 20%;
-  padding: 10px;
+.colorWorking {
+  font-weight: bold;
+  color: #e06830;
 }
 
-/* HIDE RADIO */
-[type=radio] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* IMAGE STYLES */
-[type=radio] + img {
-  cursor: pointer;
-}
-
-/* CHECKED STYLES */
-[type=radio]:checked + img {
-  outline: 2px solid #282525;
+.colorNotOk {
+  font-weight: bold;
+  color: #bf1d5e;
 }
 
 .hrOk {
@@ -79,7 +76,7 @@
 .form-inline {
   display: flex;
   align-items: center;
-  justify-content: center
+  justify-content: center;
 }
 
 .form-inline input {
@@ -90,4 +87,23 @@
 .form-inline button {
   padding: 6px;
   cursor: pointer;
+}
+
+.form-inline select {
+  padding: 6px;
+}
+
+.radioButtonImage {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radioButtonImage + img {
+  cursor: pointer;
+}
+
+.radioButtonImage:checked + img {
+  outline: 2px solid #282525;
 }

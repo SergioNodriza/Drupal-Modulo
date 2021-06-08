@@ -40,8 +40,8 @@ class QueryService {
     }
 
     if ($params['week_filter']) {
-      $query .= sprintf(" and extract(week from nfdm.field_date_mark_value) = '%s'", $params['week_filter']);
-      $query .= sprintf(" and extract(year from nfdm.field_date_mark_value) = '%s'", $params['year_filter']);
+      $query .= sprintf(" and extract(week from nfdm.field_date_mark_value) like '%s'", $params['week_filter']);
+      $query .= sprintf(" and extract(year from nfdm.field_date_mark_value) like '%s'", $params['year_filter']);
     }
 
     $query .= " order by nfdm.field_date_mark_value desc";
@@ -59,11 +59,22 @@ class QueryService {
   }
 
   public function queryUsersIds($connection) {
-    $queryUser = "select uid from users where uid not like 0 and uid not like 30";
+    $queryUser = "select uid from users where uid not like 0";
     return $connection->query($queryUser)->fetchAll(\PDO::FETCH_COLUMN);
   }
-  public function queryUserHours($connection, $userId) {
-    $query = sprintf("select field_hours_day_value from user__field_hours_day where entity_id like '%s'", $userId);
+  public function queryUserIdByName($connection, $userName) {
+    $query = sprintf("select uid from users_field_data where name like '%s'", $userName);
     return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
+  }
+  public function queryUserNames($connection) {
+    $query = "select name from users_field_data where uid not like 0";
+    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+  }
+  public function queryJornadaUser($connection, $userId) {
+    $query = sprintf("select ufhd.field_hours_day_value as day, ufhw.field_hours_week_value as week
+                            from user__field_hours_day ufhd
+                                join user__field_hours_week ufhw on ufhd.entity_id = ufhw.entity_id
+                            where ufhd.entity_id like '%s';", $userId);
+    return $connection->query($query)->fetch(\PDO::FETCH_ASSOC);
   }
 }

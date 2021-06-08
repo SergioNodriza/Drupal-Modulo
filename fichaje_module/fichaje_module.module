@@ -11,20 +11,22 @@ use Drupal\user\Entity\User;
 function fichaje_module_theme($existing, $type, $theme, $path) {
   return array(
 
+    'empresas_fichar' => array(
+      'variables' => array('results' => array(), 'actual' => '')
+    ),
     'warning_fichar' => array(
       'variables' => array('fichaje' => array(), 'error' => '')
     ),
     'no_warning_fichar' => array(
-
     ),
     'result_fichar' => array(
       'variables' => array('results' => array())
     ),
-    'empresas_fichar' => array(
-      'variables' => array('results' => array(), 'actual' => '')
-    ),
     'usuario_fichajes' => array(
       'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => '', 'date' => '', 'isWeek' => '')
+    ),
+    'admin_partes' => array(
+      'variables' => array('users' => array(), 'date' => '', 'names' => array(), 'userName' => '')
     ),
   );
 }

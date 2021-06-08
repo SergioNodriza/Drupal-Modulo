@@ -147,7 +147,7 @@ class ParteController extends ControllerBase {
         }
       }
 
-      $arrayWeeks[$key]['total'] = gmdate('H:i:s', $totalSeconds);
+      $arrayWeeks[$key]['total'] = $this->timeService->secondsToTime($totalSeconds);
     }
     return $arrayWeeks;
   }
@@ -178,7 +178,7 @@ class ParteController extends ControllerBase {
   public function getDate($date_filter, $week_filter) {
 
     if ($date_filter) {
-      return date('Y-m-d', strtotime($date_filter));
+      return $date_filter;
     }
 
     if ($week_filter) {

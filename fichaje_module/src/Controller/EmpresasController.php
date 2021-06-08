@@ -39,7 +39,7 @@ class EmpresasController extends ControllerBase {
       $actual = [
         'empresa' => $last_fichaje['empresa'],
         'time' => $time,
-        'limit' => $this->queryService->queryUserHours($connection, $user->id())
+        'limit' => $this->queryService->queryJornadaUser($connection, $user->id())['day']
       ];
 
     } else {
