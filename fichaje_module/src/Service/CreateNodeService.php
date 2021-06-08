@@ -13,7 +13,7 @@ class CreateNodeService {
   public function createNode($user, $type, $empresaId, $interval = false, $dateFix = false) {
 
     if ($dateFix) {
-      $date = date('Y-m-d\TH:i:s', strtotime($dateFix)+1);
+      $date = date('Y-m-d\TH:i:s', strtotime($dateFix));
       $dateInterval = date('Y-m-d\TH:i:s', strtotime($dateFix));
       $dateTitle = date('d-m-Y H:i:s', strtotime($dateFix));
     } else {

@@ -44,7 +44,8 @@ class WarningController extends ControllerBase {
   public function fix($connection, $user, $empresaNameOpen, $date, $time)
   {
     $dateTime = $date . ' ' . $time;
-    $interval = $this->timeService->timeDiff(new \DateTime(), $dateTime);
+    $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
+    $interval = $this->timeService->timeDiff($last_fichaje['date'], $dateTime);
 
     if ($interval === false) {
       return $this->twigWarning($connection, $user, true);
