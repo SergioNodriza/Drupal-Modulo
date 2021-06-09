@@ -1,0 +1,22 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_website
+    - node.type.empresa
+  module:
+    - link
+id: node.empresa.field_website
+field_name: field_website
+entity_type: node
+bundle: empresa
+label: website_empresa
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 1
+field_type: link

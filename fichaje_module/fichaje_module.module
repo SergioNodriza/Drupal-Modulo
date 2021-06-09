@@ -12,7 +12,7 @@ function fichaje_module_theme($existing, $type, $theme, $path) {
   return array(
 
     'empresas_fichar' => array(
-      'variables' => array('results' => array(), 'actual' => '')
+      'variables' => array('empresas' => array(), 'actual' => '')
     ),
     'warning_fichar' => array(
       'variables' => array('fichaje' => array(), 'error' => '')
@@ -26,7 +26,7 @@ function fichaje_module_theme($existing, $type, $theme, $path) {
       'variables' => array('results' => array(array(array())), 'buttons' => array(), 'route' => '', 'date' => '', 'isWeek' => '')
     ),
     'admin_partes' => array(
-      'variables' => array('users' => array(), 'date' => '', 'names' => array(), 'userName' => '')
+      'variables' => array('users' => array(), 'date' => '', 'names' => array(), 'userName' => '', 'valid' => '')
     ),
   );
 }
@@ -43,7 +43,7 @@ function fichaje_module_cron()
   $connection = Database::getConnection();
   $queryService = \Drupal::service('fichaje_module.query_service');
 
-  $usersIds = $queryService->queryUsersIds($connection);
+  $usersIds = $queryService->queryCompletedUsersIds($connection);
   foreach ($usersIds as $userId) {
 
     $user = User::load($userId);
@@ -52,7 +52,7 @@ function fichaje_module_cron()
     if ($last_fichaje['type'] === 'Entrada') {
 
       $fichaje = Node::load($last_fichaje['id']);
-      $fichaje->set('field_time_diff_mark', date('Y-m-d\TH:i:s'));
+      $fichaje->set('field_time_mark', date('Y-m-d\TH:i:s'));
       $fichaje->save();
     }
   }

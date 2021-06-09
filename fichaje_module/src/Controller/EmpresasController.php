@@ -49,7 +49,7 @@ class EmpresasController extends ControllerBase {
       ];
     }
 
-    if ($actual['type'] >= 8) {
+    if ($actual['time'] >= $actual['limit']) {
       $title = ' | Aviso en ' . $actual['empresa'];
     } else {
       $title = '';
@@ -58,7 +58,7 @@ class EmpresasController extends ControllerBase {
     return array(
       '#title' => 'Fichador' . $title,
       '#theme' => 'empresas_fichar',
-      '#results' => $this->buttonMakerService->makeButtons($empresasIds),
+      '#empresas' => $this->buttonMakerService->makeButtons($empresasIds),
       '#actual' => $actual
     );
   }

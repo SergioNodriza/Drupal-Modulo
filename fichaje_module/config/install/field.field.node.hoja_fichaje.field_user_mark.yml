@@ -1,0 +1,27 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_user_mark
+    - node.type.hoja_fichaje
+id: node.hoja_fichaje.field_user_mark
+field_name: field_user_mark
+entity_type: node
+bundle: hoja_fichaje
+label: user_mark
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: true
+    filter:
+      type: _none
+    target_bundles: null
+    sort:
+      field: _none
+    auto_create: false
+field_type: entity_reference

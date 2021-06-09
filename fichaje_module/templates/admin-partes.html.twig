@@ -5,57 +5,63 @@
 
   <hr><br>
 
-  <form method="post" id="hideShow">
+  {% if valid == false %}
+    <h2 class="center">No hay Usuarios|Empresas configurados correctamente</h2>
+  {% else %}
 
-    <div class="form-inline">
-      <div class="center">
+    <form method="post" id="hideShow">
 
-        <label>
-          <select id="user" name="user_name">
-            {% for name in names %}
+      <div class="form-inline">
+        <div class="center">
 
-              {% if name == userName %}
-                <option value="{{ name }}" selected>{{ name }}</option>
-              {% else %}
-                <option value="{{ name }}">{{ name }}</option>
-              {% endif %}
+          <label>
+            <select id="user" name="user_name">
+              {% for name in names %}
 
-            {% endfor %}
-          </select>
-        </label>
+                {% if name == userName %}
+                  <option value="{{ name }}" selected>{{ name }}</option>
+                {% else %}
+                  <option value="{{ name }}">{{ name }}</option>
+                {% endif %}
 
+              {% endfor %}
+            </select>
+          </label>
+
+        </div>
       </div>
-    </div>
 
-    <div class="form-inline">
-      <div class="center">
+      <div class="form-inline">
+        <div class="center">
 
-        <label for="date" class="label"><input type="date" id="date" name="date_filter" value="{{ date }}"></label>
-        <button type="submit" name="submit" value="submit">Filtrar</button>
+          <label for="date" class="label"><input type="date" id="date" name="date_filter" value="{{ date }}"></label>
+          <button type="submit" name="submit" value="submit">Filtrar</button>
 
+        </div>
       </div>
-    </div>
 
-  </form>
+    </form>
 
-  <br><br><hr><br>
+    <br><br><hr><br>
 
-  <table class="equalDivide">
-    <tr>
-      <th class="center">Usuario</th>
-      <th class="center">Jornada</th>
-      <th class="center">Horas Semana</th>
-    </tr>
-
-    {% for key, user in users %}
-
+    <table class="equalDivide">
       <tr>
-        <td><a href="/user/{{ key }}">{{ user.name }}</a></td>
-        <td>{{ user.jornada }}</td>
-        <td class="{{ user.state }}">{{ user.time }}</td>
+        <th class="center">Usuario</th>
+        <th class="center">Jornada</th>
+        <th class="center">Horas Semana</th>
       </tr>
 
-    {% endfor %}
-  </table>
+      {% for key, user in users %}
+
+        <tr>
+          <td><a href="/user/{{ key }}">{{ user.name }}</a></td>
+          <td>{{ user.jornada }}</td>
+          <td class="{{ user.state }}">{{ user.time }}</td>
+        </tr>
+
+      {% endfor %}
+    </table>
+
+  {% endif %}
 
 {% endblock %}

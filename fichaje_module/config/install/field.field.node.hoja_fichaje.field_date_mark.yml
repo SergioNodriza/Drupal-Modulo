@@ -1,0 +1,23 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_mark
+    - node.type.hoja_fichaje
+  module:
+    - datetime
+id: node.hoja_fichaje.field_date_mark
+field_name: field_date_mark
+entity_type: node
+bundle: hoja_fichaje
+label: date_mark
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

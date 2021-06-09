@@ -31,7 +31,7 @@ class AdminController extends ControllerBase {
     $this->redirectByFilters($_POST['date_filter'], $_POST['user_name'], $_POST['submit']);
 
     $connection = Database::getConnection();
-    $usersIds = $this->queryService->queryUsersIds($connection);
+    $usersIds = $this->queryService->queryCompletedUsersIds($connection);
     $userName = Drupal::request()->get('user_name_filter');
     $date = Drupal::request()->get('date_filter');
 
@@ -59,7 +59,8 @@ class AdminController extends ControllerBase {
       '#users' => $users,
       '#date' => $this->getDate($date),
       '#names' => $this->getNames($connection),
-      '#userName' => $userName
+      '#userName' => $userName,
+      '#valid' => count($usersIds) > 0
     );
   }
 

@@ -1,0 +1,60 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.node.hoja_fichaje.field_date_mark
+    - field.field.node.hoja_fichaje.field_empresa_mark
+    - field.field.node.hoja_fichaje.field_time_mark
+    - field.field.node.hoja_fichaje.field_type_mark
+    - field.field.node.hoja_fichaje.field_user_mark
+    - node.type.hoja_fichaje
+  module:
+    - datetime
+    - text
+    - user
+id: node.hoja_fichaje.default
+targetEntityType: node
+bundle: hoja_fichaje
+mode: default
+content:
+  field_date_mark:
+    weight: 0
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_empresa_mark:
+    weight: 3
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_time_mark:
+    weight: 4
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_type_mark:
+    weight:
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_user_mark:
+    weight: 1
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: author
+    region: content
+hidden:
+  langcode: true
+  links: true

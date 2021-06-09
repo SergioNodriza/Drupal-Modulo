@@ -7,10 +7,14 @@
 
   <div class="center">
 
-    {%  for empresa in results %}
-      <div class="column20">
+    {% if empresas|length == 0 %}
+      <h2 class="center">No tienes Empresas configuradas</h2>
+    {% else %}
 
-        {% if empresa.name == actual.empresa%}
+      {%  for empresa in empresas %}
+        <div class="column20">
+
+          {% if empresa.name == actual.empresa%}
 
           {% if actual.time >= actual.limit %}
 
@@ -32,17 +36,17 @@
 
           {% endif %}
 
-        {% else %}
-
-        {% if actual.time >= actual.limit %}
-
-            <a href="/aviso/{{ empresa.name }}">
-              <button>
-                <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
-              </button>
-
-
           {% else %}
+
+          {% if actual.time >= actual.limit %}
+
+          <a href="/aviso/{{ empresa.name }}">
+            <button>
+              <img src="{{ empresa.image }}" alt="{{ empresa.name }}" typeof="foaf:Image" class="image-style-thumbnail" width="100" height="100">
+            </button>
+
+
+            {% else %}
 
             <a href="/fichar/{{ empresa.name }}">
               <button>
@@ -50,15 +54,17 @@
               </button>
 
 
-          {% endif %}
+              {% endif %}
 
             </a>
             <hr class="hrBase">
 
-        {% endif %}
+            {% endif %}
 
-      </div>
-    {% endfor %}
+        </div>
+      {% endfor %}
+
+    {% endif %}
 
   </div>
 

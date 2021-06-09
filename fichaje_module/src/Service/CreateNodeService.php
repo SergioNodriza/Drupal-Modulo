@@ -28,10 +28,10 @@ class CreateNodeService {
 
     if ($interval) {
       $node->set('field_date_mark', $dateInterval);
-      $node->set('field_time_diff_mark', $interval);
+      $node->set('field_time_mark', $interval);
     } else {
       $node->set('field_date_mark', $date);
-      $node->set('field_time_diff_mark', date('Y-m-d\TH:i:s'));
+      $node->set('field_time_mark', date('Y-m-d\TH:i:s'));
     }
 
     $node->set('field_type_mark', $type);

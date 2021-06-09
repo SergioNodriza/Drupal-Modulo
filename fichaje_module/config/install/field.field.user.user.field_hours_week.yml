@@ -1,0 +1,20 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_hours_week
+  module:
+    - text
+    - user
+id: user.user.field_hours_week
+field_name: field_hours_week
+entity_type: user
+bundle: user
+label: hours_week
+description: 'Format HH:ii:ss'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

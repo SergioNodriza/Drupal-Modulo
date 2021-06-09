@@ -1,0 +1,51 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.node.empresa.field_image
+    - field.field.node.empresa.field_telefono
+    - field.field.node.empresa.field_website
+    - image.style.thumbnail
+    - node.type.empresa
+  module:
+    - image
+    - link
+    - telephone
+    - user
+id: node.empresa.default
+targetEntityType: node
+bundle: empresa
+mode: default
+content:
+  field_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: thumbnail
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_telefono:
+    weight:
+    label: hidden
+    settings:
+      title: ''
+    third_party_settings: {  }
+    type: telephone_link
+    region: content
+  field_website:
+    weight: 1
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+hidden:
+  langcode: true
+  links: true

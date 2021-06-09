@@ -1,0 +1,26 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.hoja_fichaje.field_date_mark
+    - field.field.node.hoja_fichaje.field_empresa_mark
+    - field.field.node.hoja_fichaje.field_time_mark
+    - field.field.node.hoja_fichaje.field_type_mark
+    - field.field.node.hoja_fichaje.field_user_mark
+    - node.type.hoja_fichaje
+  module:
+    - user
+id: node.hoja_fichaje.teaser
+targetEntityType: node
+bundle: hoja_fichaje
+mode: teaser
+content: {  }
+hidden:
+  field_date_mark: true
+  field_empresa_mark: true
+  field_time_mark: true
+  field_type_mark: true
+  field_user_mark: true
+  langcode: true
+  links: true

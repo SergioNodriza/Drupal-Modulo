@@ -1,0 +1,20 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_time_mark
+    - node.type.hoja_fichaje
+  module:
+    - text
+id: node.hoja_fichaje.field_time_mark
+field_name: field_time_mark
+entity_type: node
+bundle: hoja_fichaje
+label: time_mark
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

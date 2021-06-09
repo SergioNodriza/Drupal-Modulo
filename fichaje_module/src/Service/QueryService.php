@@ -9,26 +9,26 @@ class QueryService {
 
   public function queryLastFichaje($connection, $user) {
     $query = sprintf("select nftm.entity_id as id, nftm.field_type_mark_value as type, nfd.title as empresa,
-                                field_date_mark_value as date, nftdm.field_time_diff_mark_value as time
+                                field_date_mark_value as date, nftdm.field_time_mark_value as time
                             from node__field_date_mark nfdm
                             join node__field_type_mark nftm on nfdm.entity_id = nftm.entity_id
                             join node__field_user_mark nfum on nfdm.entity_id = nfum.entity_id
                             join node__field_empresa_mark nfem on nfdm.entity_id = nfem.entity_id
                             join node_field_data nfd on nfd.nid = nfem.field_empresa_mark_target_id
-                            join node__field_time_diff_mark nftdm on nfdm.entity_id = nftdm.entity_id
+                            join node__field_time_mark nftdm on nfdm.entity_id = nftdm.entity_id
                             where nfum.field_user_mark_target_id like '%s'
                             order by nfdm.field_date_mark_value desc limit 1", $user->id());
     return $connection->query($query)->fetch(\PDO::FETCH_ASSOC);
   }
   public function queryFichajesUsuario($connection, $params = []) {
     $query = sprintf("select nfdm.field_date_mark_value as date, nftm.field_type_mark_value as type,
-                                nfd.title as empresa, coalesce(nftdm.field_time_diff_mark_value, '') as time
+                                nfd.title as empresa, coalesce(nftdm.field_time_mark_value, '') as time
                             from node__field_user_mark nfum
                                      join node__field_date_mark nfdm on nfum.entity_id = nfdm.entity_id
                                      join node__field_type_mark nftm on nfdm.entity_id = nftm.entity_id
                                      join node__field_empresa_mark nfem on nfdm.entity_id = nfem.entity_id
                                      join node_field_data nfd on nfd.nid = nfem.field_empresa_mark_target_id
-                                     left join node__field_time_diff_mark nftdm on nfdm.entity_id = nftdm.entity_id
+                                     left join node__field_time_mark nftdm on nfdm.entity_id = nftdm.entity_id
                             where nfum.field_user_mark_target_id like '%s'", $params['userId']);
 
     if ($params['empresaName']) {
@@ -58,9 +58,12 @@ class QueryService {
     return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
   }
 
-  public function queryUsersIds($connection) {
-    $queryUser = "select uid from users where uid not like 0";
-    return $connection->query($queryUser)->fetchAll(\PDO::FETCH_COLUMN);
+  public function queryCompletedUsersIds($connection) {
+    $query = "select uid from users u
+                join user__field_empresas_user ufeu on u.uid = ufeu.entity_id
+                join user__field_hours_day ufhd on ufeu.entity_id = ufhd.entity_id
+                join user__field_hours_week ufhw on ufhd.entity_id = ufhw.entity_id";
+    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
   }
   public function queryUserIdByName($connection, $userName) {
     $query = sprintf("select uid from users_field_data where name like '%s'", $userName);

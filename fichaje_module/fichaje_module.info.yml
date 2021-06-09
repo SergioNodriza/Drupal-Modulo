@@ -1,5 +1,5 @@
 name: Fichaje Module
-description: Crea una Hoja de Fichaje.
+description: Fichador, Content Types, Partes.
 package: Custom
 type: module
 version: 1.0

@@ -1,0 +1,38 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_empresas_user
+    - field.field.user.user.field_hours_day
+    - field.field.user.user.field_hours_week
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - image
+    - user
+_core:
+  default_config_hash: V51QPCKkgNREKtSmB9Iu2wmAMEpktVpnzklWaZV8UYo
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  member_for:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  user_picture:
+    type: image
+    weight: 0
+    region: content
+    settings:
+      image_style: thumbnail
+      image_link: content
+    third_party_settings: {  }
+    label: hidden
+hidden:
+  field_empresas_user: true
+  field_hours_day: true
+  field_hours_week: true
+  langcode: true
