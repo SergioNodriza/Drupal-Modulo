@@ -30,7 +30,7 @@ class EmpresasController extends ControllerBase {
     Drupal::service("router.builder")->rebuild();
     $user = Drupal::currentUser();
     $connection = Database::getConnection();
-    $empresasIds = $this->queryService->queryEmpresasIds($connection, $user);
+    $empresasIds = $this->queryService->queryEmpresasIdsByUser($connection, $user);
 
     $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
     if ($last_fichaje['type'] === self::typeOpen) {

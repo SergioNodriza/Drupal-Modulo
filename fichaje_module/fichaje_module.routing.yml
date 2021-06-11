@@ -36,3 +36,19 @@ fichaje.partes:
     user:
   requirements:
     _permission: 'access content'
+
+fichaje.user_form:
+  path: '/form/user'
+  defaults:
+    _form: '\Drupal\fichaje_module\Form\UserForm'
+    _title: 'Crear Usuario'
+  requirements:
+    _permission: 'access content'
+
+fichaje.empresa_form:
+  path: '/form/empresa'
+  defaults:
+    _form: '\Drupal\fichaje_module\Form\EmpresaForm'
+    _title: 'Crear Empresa'
+  requirements:
+    _permission: 'access content'

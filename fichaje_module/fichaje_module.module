@@ -57,3 +57,19 @@ function fichaje_module_cron()
     }
   }
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function fichaje_module_uninstall($is_syncing) {
+
+  $connection = Database::getConnection();
+  $queryService = \Drupal::service('fichaje_module.query_service');
+
+  $nodesIds = $queryService->getCustomNodes($connection);
+  foreach ($nodesIds as $nodeId) {
+
+    $node = Node::load($nodeId);
+    $node->delete();
+  }
+}

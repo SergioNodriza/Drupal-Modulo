@@ -166,7 +166,7 @@ class ParteController extends ControllerBase {
   }
   public function buttons($connection, $user)
   {
-    $empresasIds = $this->queryService->queryEmpresasIds($connection, $user);
+    $empresasIds = $this->queryService->queryEmpresasIdsByUser($connection, $user);
     $uri = Drupal::request()->getRequestUri();
 
     if ($uri !== '/parte' && !str_starts_with($uri, '/parte?')) {

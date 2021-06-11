@@ -12,7 +12,7 @@ entity_type: node
 bundle: hoja_fichaje
 label: time_mark
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

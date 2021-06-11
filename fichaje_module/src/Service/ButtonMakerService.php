@@ -21,7 +21,7 @@ class ButtonMakerService {
     if ($back) {
       $buttons[] = [
         'name' => 'general',
-        'image' => file_create_url("public://2021-05/arrow.png"),
+        'image' => drupal_get_path('module', 'fichaje_module') . '/img/arrow.png'
       ];
     }
 

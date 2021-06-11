@@ -53,9 +53,13 @@ class QueryService {
     $query = sprintf("select nid from node_field_data where title like '%s'", $empresaName);
     return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
   }
-  public function queryEmpresasIds($connection, $user) {
+  public function queryEmpresasIdsByUser($connection, $user) {
     $query = sprintf("select field_empresas_user_target_id from user__field_empresas_user where entity_id like '%s'", $user->id());
     return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+  }
+  public function queryEmpresasInfo($connection) {
+    $query = "select nid as id, title as name from node_field_data where type like 'empresa'";
+    return $connection->query($query)->fetchAll(\PDO::FETCH_ASSOC);
   }
 
   public function queryCompletedUsersIds($connection) {
@@ -69,6 +73,11 @@ class QueryService {
     $query = sprintf("select uid from users_field_data where name like '%s'", $userName);
     return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
   }
+  public function queryUserIdByNameAndEmail($connection, $name, $email) {
+
+    $query = sprintf("select uid from users_field_data where name like '%s' and mail like '%s'", $name, $email);
+    return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
+  }
   public function queryUserNames($connection) {
     $query = "select name from users_field_data where uid not like 0";
     return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
@@ -79,5 +88,10 @@ class QueryService {
                                 join user__field_hours_week ufhw on ufhd.entity_id = ufhw.entity_id
                             where ufhd.entity_id like '%s';", $userId);
     return $connection->query($query)->fetch(\PDO::FETCH_ASSOC);
+  }
+
+  public function getCustomNodes($connection) {
+    $query = "select nid from node where type in ('empresa', 'hoja_fichaje')";
+    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
   }
 }
