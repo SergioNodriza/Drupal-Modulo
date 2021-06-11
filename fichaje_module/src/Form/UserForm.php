@@ -82,8 +82,8 @@ class UserForm extends FormBase {
 
     $form['imagen'] = [
       '#type' => 'managed_file',
-      '#title' => $this->t('Imagen'),
-      '#description' => $this->t('Permitidos: @allowed_ext', ['@allowed_ext' => $allowed_ext]),
+      '#title' => 'Imagen',
+      '#description' => 'Permitidos: @allowed_ext', ['@allowed_ext' => $allowed_ext],
       '#upload_location' => sprintf("public://users/%s", date('Y-m')),
       '#multiple' => FALSE,
       '#default_value' => $config->get('image'),

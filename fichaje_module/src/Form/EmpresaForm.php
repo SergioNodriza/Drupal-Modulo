@@ -57,8 +57,8 @@ class EmpresaForm extends FormBase {
 
     $form['image'] = [
       '#type' => 'managed_file',
-      '#title' => $this->t('Imagen'),
-      '#description' => $this->t('Permitidos: @allowed_ext', ['@allowed_ext' => $allowed_ext]),
+      '#title' => 'Imagen',
+      '#description' => 'Permitidos: @allowed_ext', ['@allowed_ext' => $allowed_ext],
       '#upload_location' => sprintf("public://empresas/%s", date('Y-m')),
       '#multiple' => FALSE,
       '#default_value' => $config->get('image'),
@@ -120,7 +120,7 @@ class EmpresaForm extends FormBase {
     $node->setTitle($name);
     $node->set('field_website', ['uri' => $website, 'title' => '', 'options' => []]);
     $node->set('field_telefono', ['value' => $telefono]);
-    $node->set('field_image', $fid);
+    $node->set('field_image', ['target_id' => $fid[0], 'alt' => $name . '_image']);
     $node->save();
 
     Drupal::messenger()->addMessage('Empresa Creada');
