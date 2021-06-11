@@ -2,6 +2,8 @@
 
 namespace Drupal\fichaje_module\Service;
 
+use PDO;
+
 class QueryService {
 
   const typeOpen = 'Entrada';
@@ -18,7 +20,7 @@ class QueryService {
                             join node__field_time_mark nftdm on nfdm.entity_id = nftdm.entity_id
                             where nfum.field_user_mark_target_id like '%s'
                             order by nfdm.field_date_mark_value desc limit 1", $user->id());
-    return $connection->query($query)->fetch(\PDO::FETCH_ASSOC);
+    return $connection->query($query)->fetch(PDO::FETCH_ASSOC);
   }
   public function queryFichajesUsuario($connection, $params = []) {
     $query = sprintf("select nfdm.field_date_mark_value as date, nftm.field_type_mark_value as type,
@@ -46,20 +48,20 @@ class QueryService {
 
     $query .= " order by nfdm.field_date_mark_value desc";
 
-    return $connection->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+    return $connection->query($query)->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function queryIdEmpresa($connection, $empresaName) {
     $query = sprintf("select nid from node_field_data where title like '%s'", $empresaName);
-    return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetch(PDO::FETCH_COLUMN);
   }
   public function queryEmpresasIdsByUser($connection, $user) {
     $query = sprintf("select field_empresas_user_target_id from user__field_empresas_user where entity_id like '%s'", $user->id());
-    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetchAll(PDO::FETCH_COLUMN);
   }
   public function queryEmpresasInfo($connection) {
     $query = "select nid as id, title as name from node_field_data where type like 'empresa'";
-    return $connection->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+    return $connection->query($query)->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function queryCompletedUsersIds($connection) {
@@ -67,31 +69,31 @@ class QueryService {
                 join user__field_empresas_user ufeu on u.uid = ufeu.entity_id
                 join user__field_hours_day ufhd on ufeu.entity_id = ufhd.entity_id
                 join user__field_hours_week ufhw on ufhd.entity_id = ufhw.entity_id";
-    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetchAll(PDO::FETCH_COLUMN);
   }
   public function queryUserIdByName($connection, $userName) {
     $query = sprintf("select uid from users_field_data where name like '%s'", $userName);
-    return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetch(PDO::FETCH_COLUMN);
   }
   public function queryUserIdByNameAndEmail($connection, $name, $email) {
 
     $query = sprintf("select uid from users_field_data where name like '%s' and mail like '%s'", $name, $email);
-    return $connection->query($query)->fetch(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetch(PDO::FETCH_COLUMN);
   }
   public function queryUserNames($connection) {
     $query = "select name from users_field_data where uid not like 0";
-    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetchAll(PDO::FETCH_COLUMN);
   }
   public function queryJornadaUser($connection, $userId) {
     $query = sprintf("select ufhd.field_hours_day_value as day, ufhw.field_hours_week_value as week
                             from user__field_hours_day ufhd
                                 join user__field_hours_week ufhw on ufhd.entity_id = ufhw.entity_id
                             where ufhd.entity_id like '%s';", $userId);
-    return $connection->query($query)->fetch(\PDO::FETCH_ASSOC);
+    return $connection->query($query)->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getCustomNodes($connection) {
     $query = "select nid from node where type in ('empresa', 'hoja_fichaje')";
-    return $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN);
+    return $connection->query($query)->fetchAll(PDO::FETCH_COLUMN);
   }
 }

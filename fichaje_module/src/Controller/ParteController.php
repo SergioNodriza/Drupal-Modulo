@@ -14,12 +14,14 @@ class ParteController extends ControllerBase {
 
   const typeOpen = 'Entrada';
 
+  private $connection;
   private $timeService;
   private $queryService;
   private $buttonMakerService;
 
   public function __construct()
   {
+    $this->connection = Database::getConnection();
     $this->timeService = Drupal::service('fichaje_module.time_service');
     $this->queryService = Drupal::service('fichaje_module.query_service');
     $this->buttonMakerService = Drupal::service('fichaje_module.button_maker_service');
@@ -32,7 +34,6 @@ class ParteController extends ControllerBase {
     $this->redirectByFilters($_POST['empresa'], $_POST['date_filter'], $_POST['week_filter'], $_POST['submit']);
 
     $user = Drupal::currentUser();
-    $connection = Database::getConnection();
     $filters = Drupal::request()->get('filters');
     $date_filter = Drupal::request()->get('date_filter');
 
@@ -42,7 +43,7 @@ class ParteController extends ControllerBase {
       $week_filter = Drupal::request()->get('week_filter');
     }
 
-    $fichajes = $this->getFichajesByFilters($connection, $user, $empresaName, $date_filter, $week_filter);
+    $fichajes = $this->getFichajesByFilters($user, $empresaName, $date_filter, $week_filter);
     $arrayWeeks = $this->groupFichajesByWeekAndFormat($fichajes);
     $arrayCompleted = $this->getTotalsByWeek($arrayWeeks);
 
@@ -50,7 +51,7 @@ class ParteController extends ControllerBase {
       '#title' => $this->formatTitle($empresaName),
       '#theme' => 'usuario_fichajes',
       '#results' => $arrayCompleted,
-      '#buttons' => $this->buttons($connection, $user),
+      '#buttons' => $this->buttons($user),
       '#route' => Drupal::routeMatch()->getParameter('empresaName') ?? 'general',
       '#date' => $this->getDate($date_filter, $week_filter),
       '#isWeek' => !empty($week_filter)
@@ -98,7 +99,7 @@ class ParteController extends ControllerBase {
     }
   }
 
-  public function getFichajesByFilters($connection, $user, $empresaName, $date_filter, $week_filter)
+  public function getFichajesByFilters($user, $empresaName, $date_filter, $week_filter)
   {
     $params = [];
     $params['userId'] = $user->id();
@@ -112,7 +113,7 @@ class ParteController extends ControllerBase {
     elseif ($date_filter) {$params['date_filter'] = $date_filter;}
 
 
-    return $this->queryService->queryFichajesUsuario($connection, $params);
+    return $this->queryService->queryFichajesUsuario($this->connection, $params);
   }
   public function groupFichajesByWeekAndFormat($fichajes) {
 
@@ -164,9 +165,9 @@ class ParteController extends ControllerBase {
 
     return $title;
   }
-  public function buttons($connection, $user)
+  public function buttons($user)
   {
-    $empresasIds = $this->queryService->queryEmpresasIdsByUser($connection, $user);
+    $empresasIds = $this->queryService->queryEmpresasIdsByUser($this->connection, $user);
     $uri = Drupal::request()->getRequestUri();
 
     if ($uri !== '/parte' && !str_starts_with($uri, '/parte?')) {

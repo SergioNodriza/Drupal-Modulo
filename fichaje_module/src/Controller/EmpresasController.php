@@ -14,12 +14,14 @@ class EmpresasController extends ControllerBase {
   const typeOpen = 'Entrada';
   const typeClose = 'Salida';
 
+  private $connection;
   private $timeService;
   private $queryService;
   private $buttonMakerService;
 
   public function __construct()
   {
+    $this->connection = Database::getConnection();
     $this->timeService = Drupal::service('fichaje_module.time_service');
     $this->queryService = Drupal::service('fichaje_module.query_service');
     $this->buttonMakerService = Drupal::service('fichaje_module.button_maker_service');
@@ -29,17 +31,16 @@ class EmpresasController extends ControllerBase {
   {
     Drupal::service("router.builder")->rebuild();
     $user = Drupal::currentUser();
-    $connection = Database::getConnection();
-    $empresasIds = $this->queryService->queryEmpresasIdsByUser($connection, $user);
+    $empresasIds = $this->queryService->queryEmpresasIdsByUser($this->connection, $user);
 
-    $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
+    $last_fichaje = $this->queryService->queryLastFichaje($this->connection, $user);
     if ($last_fichaje['type'] === self::typeOpen) {
 
       $time = $this->timeService->timeDiff($last_fichaje['date'], $last_fichaje['time']);
       $actual = [
         'empresa' => $last_fichaje['empresa'],
         'time' => $time,
-        'limit' => $this->queryService->queryJornadaUser($connection, $user->id())['day']
+        'limit' => $this->queryService->queryJornadaUser($this->connection, $user->id())['day']
       ];
 
     } else {

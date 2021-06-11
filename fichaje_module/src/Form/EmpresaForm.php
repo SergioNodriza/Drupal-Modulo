@@ -111,6 +111,7 @@ class EmpresaForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $name = $form_state->getValue('title');
+    $name = str_replace(' ', '', $name);
     $website = $form_state->getValue('website');
     $telefono = $form_state->getValue('telefono');
     $fid = $form_state->getValue('image');

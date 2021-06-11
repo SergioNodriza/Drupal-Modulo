@@ -5,6 +5,7 @@
  */
 namespace Drupal\fichaje_module\Controller;
 
+use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 
@@ -13,26 +14,27 @@ class FichajeController extends ControllerBase {
   const typeOpen = 'Entrada';
   const typeClose = 'Salida';
 
+  private $connection;
   private $timeService;
   private $queryService;
   private $createNodeService;
 
   public function __construct()
   {
-    $this->timeService = \Drupal::service('fichaje_module.time_service');
-    $this->queryService = \Drupal::service('fichaje_module.query_service');
-    $this->createNodeService = \Drupal::service('fichaje_module.create_node_service');
+    $this->connection = Database::getConnection();
+    $this->timeService = Drupal::service('fichaje_module.time_service');
+    $this->queryService = Drupal::service('fichaje_module.query_service');
+    $this->createNodeService = Drupal::service('fichaje_module.create_node_service');
   }
 
 
   public function fichador($empresaName)
   {
-    \Drupal::service("router.builder")->rebuild();
-    $user = \Drupal::currentUser();
-    $connection = Database::getConnection();
+    Drupal::service("router.builder")->rebuild();
+    $user = Drupal::currentUser();
 
-    $empresaId = $this->queryService->queryIdEmpresa($connection, $empresaName);
-    $last_fichaje = $this->queryService->queryLastFichaje($connection, $user);
+    $empresaId = $this->queryService->queryIdEmpresa($this->connection, $empresaName);
+    $last_fichaje = $this->queryService->queryLastFichaje($this->connection, $user);
 
     if ($last_fichaje['type'] === self::typeOpen) {
 
@@ -40,7 +42,7 @@ class FichajeController extends ControllerBase {
 
       if ($last_fichaje['empresa'] !== $empresaName) {
 
-        $old_empresaID = $this->queryService->queryIdEmpresa($connection, $last_fichaje['empresa']);
+        $old_empresaID = $this->queryService->queryIdEmpresa($this->connection, $last_fichaje['empresa']);
         $this->createNodeService->createNode($user, self::typeClose, $old_empresaID, $interval);
         $this->createNodeService->createNode($user, self::typeOpen, $empresaId);
 

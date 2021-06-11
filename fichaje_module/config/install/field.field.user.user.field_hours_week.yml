@@ -14,7 +14,10 @@ label: hours_week
 description: 'Format HH:ii:ss'
 required: true
 translatable: false
-default_value: {  }
+default_value:
+  -
+    value: '40:00:00'
+    format: basic_html
 default_value_callback: ''
 settings: {  }
 field_type: text

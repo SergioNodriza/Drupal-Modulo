@@ -5,7 +5,6 @@
  */
 namespace Drupal\fichaje_module\Controller;
 
-use DateTime;
 use Drupal;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
@@ -16,11 +15,13 @@ class AdminController extends ControllerBase {
 
   const typeClose = 'Salida';
 
+  private $connection;
   private $timeService;
   private $queryService;
 
   public function __construct()
   {
+    $this->connection = Database::getConnection();
     $this->timeService = Drupal::service('fichaje_module.time_service');
     $this->queryService = Drupal::service('fichaje_module.query_service');
   }
@@ -30,8 +31,7 @@ class AdminController extends ControllerBase {
     Drupal::service("router.builder")->rebuild();
     $this->redirectByFilters($_POST['date_filter'], $_POST['user_name'], $_POST['submit']);
 
-    $connection = Database::getConnection();
-    $usersIds = $this->queryService->queryCompletedUsersIds($connection);
+    $usersIds = $this->queryService->queryCompletedUsersIds($this->connection);
     $userName = Drupal::request()->get('user_name_filter');
     $date = Drupal::request()->get('date_filter');
 
@@ -45,20 +45,20 @@ class AdminController extends ControllerBase {
     }
 
     if ($userName) {
-      $userId = $this->queryService->queryUserIdByName($connection, $userName);
+      $userId = $this->queryService->queryUserIdByName($this->connection, $userName);
       if ($userId && in_array($userId, $usersIds, TRUE)) {
         $usersIds = [$userId];
       }
     }
 
-    $users = $this->getPartes($connection, $usersIds, $params);
+    $users = $this->getPartes($usersIds, $params);
 
     return array(
       '#title' => 'Partes de Horas de la Semana',
       '#theme' => 'admin_partes',
       '#users' => $users,
       '#date' => $this->getDate($date),
-      '#names' => $this->getNames($connection),
+      '#names' => $this->getNames(),
       '#userName' => $userName,
       '#valid' => count($usersIds) > 0
     );
@@ -94,7 +94,7 @@ class AdminController extends ControllerBase {
       $response->send();
     }
   }
-  public function getPartes($connection, $usersIds, $params) {
+  public function getPartes($usersIds, $params) {
 
     $users = array();
     foreach ($usersIds as $userId) {
@@ -102,10 +102,10 @@ class AdminController extends ControllerBase {
       $user = User::load($userId);
       $users[$userId] = array();
       $users[$userId]['name'] = $user->getUsername();
-      $users[$userId]['jornada'] = $this->queryService->queryJornadaUser($connection, $userId)['week'];
+      $users[$userId]['jornada'] = $this->queryService->queryJornadaUser($this->connection, $userId)['week'];
 
       $params['userId'] = $userId;
-      $fichajes = $this->queryService->queryFichajesUsuario($connection, $params);
+      $fichajes = $this->queryService->queryFichajesUsuario($this->connection, $params);
 
       $totalSeconds = 0;
       foreach ($fichajes as $fichaje) {
@@ -126,9 +126,9 @@ class AdminController extends ControllerBase {
 
     return $users;
   }
-  public function getNames($connection) {
+  public function getNames() {
 
-    $names = $this->queryService->queryUserNames($connection);
+    $names = $this->queryService->queryUserNames($this->connection);
     array_unshift($names, 'Todos');
 
     return $names;
